@@ -1,0 +1,250 @@
+    /* 전체 레이아웃 배경색 */
+    html, body {
+      margin: 0;
+      background-color: #f3f4f6;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    
+    .pulse-animation {
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* 메인 컨테이너 레이아웃 */
+    .main-container {
+      display: flex;
+      margin: 0 auto;
+      position: relative;
+      width: 100%;
+    }
+
+    .content-area {
+      flex: 1;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* 사이드 카드 영역 */
+    .sidebar-cards {
+      width: 320px;
+      padding: 20px;
+      position: sticky;
+      top: 80px;
+      height: fit-content;
+      display: none;
+    }
+
+    /* ========== 기본 레이아웃 (Mobile) ========== */
+    
+    .main-container {
+      padding: 0 16px;
+    }
+    
+    .content-area {
+      max-width: 100%;
+    }
+    
+    /* 탭 콘텐츠 패딩 */
+    .tab-padding {
+      padding: 16px;
+    }
+    
+    /* 생성 번호 리스트: 1컬럼 */
+    #recentNumbersList,
+    #savedNumbersList {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    
+    /* 모바일 팝업 사이즈 */
+    .modal-backdrop > div {
+      max-width: calc(100vw - 32px);
+      margin: 0 16px;
+    }
+    
+    /* 사이드바 숨김 */
+    .sidebar-cards {
+      display: none;
+    }
+
+    /* 모든 카드 영역이 content-area의 전체 너비 사용 */
+    .tab-content {
+      width: 100%;
+    }
+    
+    .tab-content > div {
+      width: 100%;
+    }
+    
+    /* 개별 카드들도 전체 너비 사용 */
+    #homeTab > div,
+    #savedTab > div,
+    #checkTab > div {
+      width: 100%;
+    }
+
+    /* 하단 네비게이션 */
+    .bottom-nav {
+      margin: 0 auto;
+    }
+
+    .sidebar-card {
+      margin-bottom: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 탭 전환 애니메이션 */
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* 모달 배경 */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 로딩 스피너 */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      animation: spin 1s linear infinite;
+    }
+
+    /* 토스트 메시지 */
+    .toast {
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: #10b981;
+      color: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      z-index: 200;
+      opacity: 0;
+      transition: all 0.3s ease-in-out;
+      font-weight: 600;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* 번호 입력 칸 스타일 */
+    .number-input {
+      width: 48px;
+      height: 48px;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      outline: none;
+      transition: all 0.2s;
+    }
+
+    .number-input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .number-input.filled {
+      background: #eff6ff;
+      border-color: #3b82f6;
+      color: #1e40af;
+    }
+
+    /* 페이지네이션 */
+    .pagination-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #d1d5db;
+      transition: all 0.3s;
+    }
+
+    .pagination-dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: #3b82f6;
+    }
+
+    /* 잠긴 페이지 오버레이 */
+    .locked-overlay {
+      position: relative;
+    }
+
+    .locked-overlay::after {
+      content: '이전 페이지를 먼저 열어주세요';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.95);
+      color: #6b7280;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 12px;
+      pointer-events: none;
+    }
+    /* 스와이프 삭제 */
+    .swipe-item {
+      position: relative;
+      transition: transform 0.3s ease-out;
+      touch-action: pan-y;
+    }
+
+    .swipe-item.swiping {
+      transition: none;
+    }
+
+    .swipe-delete-btn {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      width: 80px;
+      background: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .swipe-item.swiped .swipe-delete-btn {
+      opacity: 1;
+    }
