@@ -1972,6 +1972,38 @@
       if (modalEl) modalEl.classList.remove('active');
     }
 
+    // ==================== 기타 정보 모달 ====================
+
+    function openAboutModal() {
+      const modalEl = document.getElementById('aboutModal');
+      if (modalEl) modalEl.classList.add('active');
+    }
+
+    function closeAboutModal() {
+      const modalEl = document.getElementById('aboutModal');
+      if (modalEl) modalEl.classList.remove('active');
+    }
+
+    function openPrivacyModal() {
+      const modalEl = document.getElementById('privacyModal');
+      if (modalEl) modalEl.classList.add('active');
+    }
+
+    function closePrivacyModal() {
+      const modalEl = document.getElementById('privacyModal');
+      if (modalEl) modalEl.classList.remove('active');
+    }
+
+    function openTermsModal() {
+      const modalEl = document.getElementById('termsModal');
+      if (modalEl) modalEl.classList.add('active');
+    }
+
+    function closeTermsModal() {
+      const modalEl = document.getElementById('termsModal');
+      if (modalEl) modalEl.classList.remove('active');
+    }
+
     function clearAllData() {
       if (confirm('모든 데이터를 삭제하시겠습니까?\n\n다음 항목이 초기화됩니다:\n- 오늘 남은 생성 횟수 (10회로 초기화)\n- 최근 생성 번호 리스트\n- 저장된 번호 리스트')) {
         // 할당량 초기화 (10회)
@@ -2060,6 +2092,12 @@
 
     window.openSettings = openSettings;
     window.closeSettings = closeSettings;
+    window.openAboutModal = openAboutModal;
+    window.closeAboutModal = closeAboutModal;
+    window.openPrivacyModal = openPrivacyModal;
+    window.closePrivacyModal = closePrivacyModal;
+    window.openTermsModal = openTermsModal;
+    window.closeTermsModal = closeTermsModal;
     window.showGenerateConfirm = showGenerateConfirm;
     window.closeGenerateConfirm = closeGenerateConfirm;
     window.confirmGenerate = confirmGenerate;
