@@ -10,7 +10,8 @@
       PAGES_UNLOCKED: 'hoxy_pages_unlocked',
       SAVED_PAGES_UNLOCKED: 'hoxy_saved_pages_unlocked',
       SHARE_DATE: 'hoxy_share_date',
-      RECENT_SLOTS: 'hoxy_recent_slots'
+      RECENT_SLOTS: 'hoxy_recent_slots',
+      AD_QUOTA_LIMIT: 'hoxy_ad_quota_limit'  // 광고 횟수 제한 (12시간 3회)
     };
 
     let winningData = {
@@ -172,8 +173,21 @@
     }
 
     // ==================== 광고 보고 +5회 받기 모달 ====================
-    
+
     function showAdForQuotaModal() {
+      // 광고 횟수 제한 체크
+      if (!canUseAdQuota()) {
+        const remaining = getRemainingAdQuota();
+        showToast(`광고 시청 횟수를 모두 사용했습니다. (12시간 후 초기화)`, 3000);
+        return;
+      }
+
+      // 남은 광고 횟수 표시 업데이트
+      const remainingEl = document.getElementById('adQuotaRemaining');
+      if (remainingEl) {
+        remainingEl.textContent = getRemainingAdQuota();
+      }
+
       const modalEl = document.getElementById('adForQuotaModal');
       if (modalEl) modalEl.classList.add('active');
     }
@@ -184,13 +198,22 @@
     }
 
     function confirmAdForQuota() {
+      // 광고 횟수 제한 체크
+      if (!canUseAdQuota()) {
+        closeAdForQuotaModal();
+        showToast('광고 시청 횟수를 모두 사용했습니다.', 2000);
+        return;
+      }
+
       closeAdForQuotaModal();
       showToast('광고를 시청합니다...', 2000);
-      
+
       setTimeout(() => {
+        useAdQuota();  // 광고 횟수 사용
         addQuota(5);
         updateUI();
-        showToast('생성 횟수 5회가 추가되었습니다!', 2000);
+        const remaining = getRemainingAdQuota();
+        showToast(`생성 횟수 5회가 추가되었습니다! (남은 광고: ${remaining}회)`, 2500);
       }, 3000);
     }
 
@@ -468,17 +491,25 @@
       if (modalEl) modalEl.classList.add('active');
     }
 
-    // Firebase에 번호 저장
+    // 다음 추첨 회차 계산
+    // - 발표된 회차(winning.drawNumber) + 1 = 다음 회차
+    // - 지금 생성하는 번호는 다음 추첨을 위한 것
+    function getNextDrawNumber() {
+      const winning = getWinningNumbers();
+      return winning.drawNumber + 1;
+    }
+
+    // Firebase에 번호 저장 (다음 회차로 저장)
     function saveToFirebase(numbers) {
       try {
-        const winning = getWinningNumbers();
+        const nextDraw = getNextDrawNumber();
         db.collection('generated_numbers').add({
           numbers: numbers,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          week: winning.drawNumber,
+          week: nextDraw,  // 다음 회차로 저장
           createdAt: new Date().toISOString()
         });
-        console.log('번호가 Firebase에 저장되었습니다:', numbers);
+        console.log(`번호가 Firebase에 저장되었습니다 (${nextDraw}회차):`, numbers);
       } catch (error) {
         console.error('Firebase 저장 오류:', error);
       }
@@ -545,16 +576,62 @@
       localStorage.setItem(STORAGE_KEYS.QUOTA, JSON.stringify(quota));
     }
 
+    // 12시간 주기 ID 계산
+    function getAdPeriodId() {
+      const now = new Date();
+      const hour = now.getHours();
+      const dateStr = now.toDateString();
+
+      // 0~11시: 오전 주기, 12~23시: 오후 주기
+      return hour < 12 ? dateStr + '_AM' : dateStr + '_PM';
+    }
+
+    // 광고 횟수 제한 확인 (12시간 3회)
+    function getAdQuotaLimit() {
+      const periodId = getAdPeriodId();
+      const stored = localStorage.getItem(STORAGE_KEYS.AD_QUOTA_LIMIT);
+
+      if (stored) {
+        const data = JSON.parse(stored);
+        if (data.periodId === periodId) {
+          return data;
+        }
+      }
+
+      // 새 주기 시작
+      return { periodId: periodId, count: 0, max: 3 };
+    }
+
+    // 광고 횟수 사용
+    function useAdQuota() {
+      const data = getAdQuotaLimit();
+      data.count++;
+      localStorage.setItem(STORAGE_KEYS.AD_QUOTA_LIMIT, JSON.stringify(data));
+      return data;
+    }
+
+    // 광고 횟수 제한 체크
+    function canUseAdQuota() {
+      const data = getAdQuotaLimit();
+      return data.count < data.max;
+    }
+
+    // 남은 광고 횟수
+    function getRemainingAdQuota() {
+      const data = getAdQuotaLimit();
+      return Math.max(0, data.max - data.count);
+    }
+
     function addQuota(count) {
       const stored = localStorage.getItem(STORAGE_KEYS.QUOTA);
       const quota = JSON.parse(stored);
-      
+
       // total은 항상 10으로 고정
       quota.total = 10;
-      
+
       // used를 감소시켜서 remaining 증가 (음수 방지)
       quota.used = Math.max(0, quota.used - count);
-      
+
       localStorage.setItem(STORAGE_KEYS.QUOTA, JSON.stringify(quota));
     }
 
@@ -912,64 +989,58 @@
     async function updateWinningStats() {
       try {
         const winning = getWinningNumbers();
+        if (!winning || !winning.drawNumber) {
+          console.log('당첨 번호 정보가 없습니다');
+          return;
+        }
 
         // 회차 표시 업데이트
-        const weeklyDrawEl = document.getElementById('weeklyDrawNumber');
-        if (weeklyDrawEl) weeklyDrawEl.textContent = winning.drawNumber;
+        updateElement('weeklyDrawNumber', winning.drawNumber);
+        updateElement('mobileWeeklyDraw', winning.drawNumber);
 
-        // Firebase에서 현재 회차 데이터 가져오기
-        const snapshot = await db.collection('generated_numbers')
-          .where('week', '==', winning.drawNumber)
-          .get();
+        // 캐시된 주간 통계 확인
+        const weeklyDocRef = db.collection('winning_stats').doc(`weekly_${winning.drawNumber}`);
+        const weeklyDoc = await weeklyDocRef.get();
 
-        let weeklyStats = {
-          rank1: 0,  // 1등 (6개 일치)
-          rank2: 0,  // 2등 (5개 + 보너스)
-          rank3: 0,  // 3등 (5개 일치)
-          rank4: 0,  // 4등 (4개 일치)
-          rank5: 0   // 5등 (3개 일치)
-        };
+        let weeklyStats;
 
-        snapshot.forEach(doc => {
-          const data = doc.data();
-          const matchCount = countMatches(data.numbers, winning.numbers);
-          const hasBonus = data.numbers.includes(winning.bonus);
+        if (weeklyDoc.exists) {
+          // 캐시된 통계 사용
+          weeklyStats = weeklyDoc.data();
+          console.log('캐시된 주간 통계 사용:', weeklyStats);
+        } else {
+          // 새로 계산
+          weeklyStats = await calculateWeeklyStats(winning);
 
-          if (matchCount === 6) {
-            weeklyStats.rank1++;
-          } else if (matchCount === 5 && hasBonus) {
-            weeklyStats.rank2++;
-          } else if (matchCount === 5) {
-            weeklyStats.rank3++;
-          } else if (matchCount === 4) {
-            weeklyStats.rank4++;
-          } else if (matchCount === 3) {
-            weeklyStats.rank5++;
+          // Firestore에 캐시 저장
+          if (weeklyStats.total > 0) {
+            await weeklyDocRef.set({
+              ...weeklyStats,
+              drawNumber: winning.drawNumber,
+              calculatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            console.log('주간 통계 캐시 저장 완료');
           }
-        });
+        }
 
-        const weeklyTotal = weeklyStats.rank1 + weeklyStats.rank2 + weeklyStats.rank3 + weeklyStats.rank4 + weeklyStats.rank5;
+        const weeklyTotal = (weeklyStats.rank1 || 0) + (weeklyStats.rank2 || 0) +
+                           (weeklyStats.rank3 || 0) + (weeklyStats.rank4 || 0) +
+                           (weeklyStats.rank5 || 0);
 
         // 이번주 통계 UI 업데이트 (PC 사이드바)
-        updateElement('weeklyRank1', weeklyStats.rank1);
-        updateElement('weeklyRank2', weeklyStats.rank2);
-        updateElement('weeklyRank3', weeklyStats.rank3);
-        updateElement('weeklyRank4', weeklyStats.rank4);
-        updateElement('weeklyRank5', weeklyStats.rank5);
+        updateElement('weeklyRank1', weeklyStats.rank1 || 0);
+        updateElement('weeklyRank2', weeklyStats.rank2 || 0);
+        updateElement('weeklyRank3', weeklyStats.rank3 || 0);
+        updateElement('weeklyRank4', weeklyStats.rank4 || 0);
+        updateElement('weeklyRank5', weeklyStats.rank5 || 0);
         updateElement('weeklyTotalWinners', weeklyTotal);
 
-        // 이번주 통계 UI 업데이트 (모바일 캐러셀)
-        updateElement('mobileWeeklyDraw', winning.drawNumber);
-        updateElement('mobileWeeklyR1', weeklyStats.rank1);
-        updateElement('mobileWeeklyR2', weeklyStats.rank2);
-        updateElement('mobileWeeklyR3', weeklyStats.rank3);
-        updateElement('mobileWeeklyR4', weeklyStats.rank4);
-        updateElement('mobileWeeklyR5', weeklyStats.rank5);
+        // 이번주 통계 UI 업데이트 (모바일 배너)
         updateElement('mobileWeeklyTotal', weeklyTotal);
 
         console.log('이번주 통계 업데이트 완료:', weeklyStats);
 
-        // 역대 통계 로드 (Firestore에서)
+        // 역대 통계 로드
         await loadAllTimeStats();
 
       } catch (error) {
@@ -977,32 +1048,78 @@
       }
     }
 
-    // 역대 통계 로드
+    // 주간 통계 계산
+    async function calculateWeeklyStats(winning) {
+      const snapshot = await db.collection('generated_numbers')
+        .where('week', '==', winning.drawNumber)
+        .get();
+
+      let stats = {
+        rank1: 0,
+        rank2: 0,
+        rank3: 0,
+        rank4: 0,
+        rank5: 0,
+        total: snapshot.size
+      };
+
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        if (!data.numbers || !Array.isArray(data.numbers)) return;
+
+        const matchCount = countMatches(data.numbers, winning.numbers);
+        const hasBonus = data.numbers.includes(winning.bonus);
+
+        if (matchCount === 6) {
+          stats.rank1++;
+        } else if (matchCount === 5 && hasBonus) {
+          stats.rank2++;
+        } else if (matchCount === 5) {
+          stats.rank3++;
+        } else if (matchCount === 4) {
+          stats.rank4++;
+        } else if (matchCount === 3) {
+          stats.rank5++;
+        }
+      });
+
+      return stats;
+    }
+
+    // 역대 통계 로드 (모든 주간 통계 합산)
     async function loadAllTimeStats() {
       try {
-        const doc = await db.collection('winning_stats').doc('all_time').get();
+        // 모든 주간 통계 문서 조회
+        const snapshot = await db.collection('winning_stats')
+          .where('drawNumber', '>', 0)
+          .get();
 
-        if (doc.exists) {
+        let allTime = { rank1: 0, rank2: 0, rank3: 0 };
+
+        snapshot.forEach(doc => {
           const data = doc.data();
-          // PC 사이드바
-          updateElement('allTimeRank1', data.rank1 || 0);
-          updateElement('allTimeRank2', data.rank2 || 0);
-          updateElement('allTimeRank3', data.rank3 || 0);
-          // 모바일 캐러셀
-          updateElement('mobileAllTimeR1', data.rank1 || 0);
-          updateElement('mobileAllTimeR2', data.rank2 || 0);
-          updateElement('mobileAllTimeR3', data.rank3 || 0);
-        } else {
-          // 문서가 없으면 0으로 표시 (아직 데이터 없음)
-          updateElement('allTimeRank1', 0);
-          updateElement('allTimeRank2', 0);
-          updateElement('allTimeRank3', 0);
-          updateElement('mobileAllTimeR1', 0);
-          updateElement('mobileAllTimeR2', 0);
-          updateElement('mobileAllTimeR3', 0);
-        }
+          allTime.rank1 += data.rank1 || 0;
+          allTime.rank2 += data.rank2 || 0;
+          allTime.rank3 += data.rank3 || 0;
+        });
+
+        // PC 사이드바
+        updateElement('allTimeRank1', allTime.rank1);
+        updateElement('allTimeRank2', allTime.rank2);
+        updateElement('allTimeRank3', allTime.rank3);
+
+        // 모바일 배너
+        updateElement('mobileAllTimeR1', allTime.rank1);
+
+        console.log('역대 통계 로드 완료:', allTime);
+
       } catch (error) {
         console.error('역대 통계 로드 오류:', error);
+        // 에러 시 0으로 표시
+        updateElement('allTimeRank1', 0);
+        updateElement('allTimeRank2', 0);
+        updateElement('allTimeRank3', 0);
+        updateElement('mobileAllTimeR1', 0);
       }
     }
 
@@ -1471,36 +1588,50 @@
     }
 
     // ==================== 오늘의 행운 번호 ====================
-    
+
+    // 12:00 기준 주기 ID 계산 (매일 12:00에 갱신)
+    function getLuckyPeriodId() {
+      const now = new Date();
+      const hour = now.getHours();
+      const dateStr = now.toDateString();
+
+      // 12:00 이전이면 전날 오후 주기, 12:00 이후면 오늘 오후 주기
+      if (hour < 12) {
+        const yesterday = new Date(now);
+        yesterday.setDate(yesterday.getDate() - 1);
+        return yesterday.toDateString() + '_PM';
+      }
+      return dateStr + '_PM';
+    }
+
     function getLuckyNumber() {
-      const today = new Date().toDateString();
+      const periodId = getLuckyPeriodId();
       const stored = localStorage.getItem(STORAGE_KEYS.LUCKY);
-      
+
       if (stored) {
         const lucky = JSON.parse(stored);
-        if (lucky.date === today) {
+        if (lucky.periodId === periodId) {
           return lucky;
         }
       }
 
-      const seed = new Date().getDate() + new Date().getMonth() * 31;
-      const rng = mulberry32(seed);
+      // 새로운 주기 - 완전 랜덤 번호 생성
       const numbers = [];
-      
       while (numbers.length < 6) {
-        const num = Math.floor(rng() * 45) + 1;
+        const num = Math.floor(Math.random() * 45) + 1;
         if (!numbers.includes(num)) {
           numbers.push(num);
         }
       }
-      
+
       const lucky = {
-        date: today,
+        periodId: periodId,
+        date: new Date().toDateString(),
         numbers: numbers.sort((a, b) => a - b),
         revealed: false,
         message: getLuckyMessage()
       };
-      
+
       localStorage.setItem(STORAGE_KEYS.LUCKY, JSON.stringify(lucky));
       return lucky;
     }
@@ -1521,9 +1652,16 @@
         '🌟 희망찬 하루',
         '💫 특별한 기운이 느껴지는 날',
         '🎯 집중력이 높아지는 날',
-        '🌈 긍정적인 에너지가 넘치는 날'
+        '🌈 긍정적인 에너지가 넘치는 날',
+        '🔥 열정이 불타오르는 날',
+        '💎 빛나는 기회의 날',
+        '🎪 신나는 일이 생기는 날',
+        '🌸 아름다운 인연의 날',
+        '⭐ 별처럼 빛나는 날',
+        '🎁 뜻밖의 선물이 오는 날'
       ];
-      return messages[new Date().getDate() % messages.length];
+      // 완전 랜덤 선택
+      return messages[Math.floor(Math.random() * messages.length)];
     }
 
     function revealLuckyNumber() {
