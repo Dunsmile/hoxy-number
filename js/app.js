@@ -172,17 +172,17 @@
       showGeneratingAnimation(count);
     }
 
-    // ==================== 광고 보고 +5회 받기 모달 ====================
+    // ==================== 무료 횟수 충전 모달 ====================
 
     function showAdForQuotaModal() {
-      // 광고 횟수 제한 체크
+      // 충전 횟수 제한 체크
       if (!canUseAdQuota()) {
         const remaining = getRemainingAdQuota();
-        showToast(`광고 시청 횟수를 모두 사용했습니다. (12시간 후 초기화)`, 3000);
+        showToast(`무료 충전 횟수를 모두 사용했습니다. (12시간 후 초기화)`, 3000);
         return;
       }
 
-      // 남은 광고 횟수 표시 업데이트
+      // 남은 충전 횟수 표시 업데이트
       const remainingEl = document.getElementById('adQuotaRemaining');
       if (remainingEl) {
         remainingEl.textContent = getRemainingAdQuota();
@@ -198,22 +198,22 @@
     }
 
     function confirmAdForQuota() {
-      // 광고 횟수 제한 체크
+      // 충전 횟수 제한 체크
       if (!canUseAdQuota()) {
         closeAdForQuotaModal();
-        showToast('광고 시청 횟수를 모두 사용했습니다.', 2000);
+        showToast('무료 충전 횟수를 모두 사용했습니다.', 2000);
         return;
       }
 
       closeAdForQuotaModal();
-      showToast('광고를 시청합니다...', 2000);
+      showToast('충전 중...', 2000);
 
       setTimeout(() => {
-        useAdQuota();  // 광고 횟수 사용
+        useAdQuota();  // 충전 횟수 사용
         addQuota(5);
         updateUI();
         const remaining = getRemainingAdQuota();
-        showToast(`생성 횟수 5회가 추가되었습니다! (남은 광고: ${remaining}회)`, 2500);
+        showToast(`생성 횟수 5회가 추가되었습니다! (남은 충전: ${remaining}회)`, 2500);
       }, 3000);
     }
 
@@ -241,7 +241,7 @@
 
     function confirmExpandSlots() {
       closeExpandSlotsModal();
-      showToast('광고를 시청합니다...', 1500);
+      showToast('슬롯 추가 중...', 1500);
       
       setTimeout(() => {
         recentSlots = Math.min(recentSlots + 5, 50);
@@ -417,7 +417,7 @@
 
     function confirmPageAdd() {
       closePageAddConfirm();
-      showToast('광고를 시청합니다...', 1500);
+      showToast('페이지 추가 중...', 1500);
       
       setTimeout(() => {
         // 페이지 잠금 해제
@@ -1665,25 +1665,41 @@
     }
 
     function revealLuckyNumber() {
-      showToast('광고를 시청합니다...', 1000);
-      
+      const revealEl = document.getElementById('luckyNumberReveal');
+      const blurredEl = document.getElementById('luckyNumberBlurred');
+
+      if (!revealEl || !blurredEl) return;
+
+      // 버튼을 로딩 애니메이션으로 변경
+      revealEl.innerHTML = `
+        <div class="flex flex-col items-center gap-2">
+          <div class="text-3xl animate-bounce">🍀</div>
+          <div class="text-sm font-bold text-purple-700">행운을 불러오는 중...</div>
+          <div class="flex gap-1">
+            <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+            <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.2s"></div>
+            <div class="w-2 h-2 bg-purple-500 rounded-full animate-pulse" style="animation-delay: 0.4s"></div>
+          </div>
+        </div>
+      `;
+
+      // 5초 후 번호 공개
       setTimeout(() => {
         const lucky = getLuckyNumber();
         lucky.revealed = true;
         localStorage.setItem(STORAGE_KEYS.LUCKY, JSON.stringify(lucky));
-        
-        const blurredEl = document.getElementById('luckyNumberBlurred');
-        const revealEl = document.getElementById('luckyNumberReveal');
-        
+
         if (blurredEl) {
           blurredEl.style.filter = 'none';
           blurredEl.innerHTML = renderNumberBalls(lucky.numbers);
         }
-        
+
         if (revealEl) {
           revealEl.style.display = 'none';
         }
-      }, 1000);
+
+        showToast('오늘의 럭키 넘버가 공개되었습니다! 🍀', 2000);
+      }, 5000);
     }
 
     // ==================== 당첨 확인 ====================
@@ -1767,7 +1783,7 @@
       // 할당량에 따라 버튼 텍스트 및 안내 메시지 변경
       if (generateBtnEl && depletedMsgEl) {
         if (quota.remaining <= 0) {
-          generateBtnEl.innerHTML = '📺 광고 보고 +5회 더 생성하기';
+          generateBtnEl.innerHTML = '🎁 무료 횟수 +5회 충전하기';
           depletedMsgEl.style.display = 'block';
         } else {
           generateBtnEl.textContent = '로또 번호 생성하기';
@@ -1976,7 +1992,7 @@
 
     function confirmSavedPageAdd() {
       closeSavedPageAddConfirm();
-      showToast('광고를 시청합니다...', 1500);
+      showToast('페이지 추가 중...', 1500);
       
       setTimeout(() => {
         savedUnlockedPages++;

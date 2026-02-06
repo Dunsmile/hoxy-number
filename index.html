@@ -193,10 +193,8 @@
 
               <div id="luckyNumberReveal" class="absolute inset-0 flex items-center justify-center">
                 <button onclick="revealLuckyNumber()" class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-2.5 rounded-full font-bold text-xs shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all flex items-center gap-1.5">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                  </svg>
-                  광고보고 확인하기
+                  <span>🍀</span>
+                  오늘의 럭키 넘버는?!
                 </button>
               </div>
             </div>
@@ -275,10 +273,8 @@
             </div>
 
             <button onclick="showExpandSlotsModal()" class="w-full mt-3 py-2.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 font-bold rounded-xl hover:from-purple-100 hover:to-pink-100 transition-all flex items-center justify-center gap-1.5 border-2 border-purple-200 shadow-sm text-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-              </svg>
-              <span>광고 시청하고 +5줄 추가</span>
+              <span>📦</span>
+              <span>슬롯 +5개 추가하기</span>
             </button>
           </div>
 
@@ -364,10 +360,8 @@
             </div>
 
             <button onclick="showSavedExpandConfirm()" class="w-full mt-3 py-2.5 bg-gradient-to-r from-purple-50 to-pink-50 text-purple-700 font-bold rounded-xl hover:from-purple-100 hover:to-pink-100 transition-all flex items-center justify-center gap-1.5 border-2 border-purple-200 shadow-sm text-sm">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-              </svg>
-              광고 시청하고 페이지 추가하기
+              <span>📄</span>
+              페이지 추가하기
             </button>
           </div>
 
@@ -571,13 +565,13 @@
       <!-- 5회 이상일 때: 5회 연속 뽑기 옵션 -->
       <label id="option5Times" class="flex items-center gap-2 p-2.5 bg-gray-50 rounded-xl mb-3 cursor-pointer hover:bg-gray-100 transition-colors">
         <input type="checkbox" id="generate5Times" class="w-4 h-4 text-blue-600 rounded">
-        <span class="text-sm font-medium text-gray-700">광고보고 연속 5회 뽑기</span>
+        <span class="text-sm font-medium text-gray-700">연속 5회 뽑기</span>
       </label>
 
       <!-- 4회 이하일 때: 남은 횟수 모두 뽑기 옵션 -->
       <label id="optionRemaining" class="hidden flex items-center gap-2 p-2.5 bg-purple-50 rounded-xl mb-3 cursor-pointer hover:bg-purple-100 transition-colors border-2 border-purple-200">
         <input type="checkbox" id="generateRemaining" class="w-4 h-4 text-purple-600 rounded">
-        <span class="text-sm font-medium text-purple-700">광고보고 남은 <span id="remainingDrawCount">4</span>회 모두 뽑기</span>
+        <span class="text-sm font-medium text-purple-700">남은 <span id="remainingDrawCount">4</span>회 모두 뽑기</span>
       </label>
 
       <div class="flex gap-2">
@@ -591,14 +585,15 @@
     </div>
   </div>
 
-  <!-- 광고 보고 +5회 받기 모달 -->
+  <!-- 무료 횟수 충전 모달 -->
   <div id="adForQuotaModal" class="modal-backdrop">
     <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl">
       <div class="text-center mb-6">
-        <div class="text-2xl font-bold text-gray-900 mb-4">광고 보고 +5회 받기</div>
-        <div class="text-sm text-gray-600 mb-2">광고를 시청하면 생성 횟수가 5회 추가됩니다</div>
+        <div class="text-3xl mb-3">🎁</div>
+        <div class="text-2xl font-bold text-gray-900 mb-4">무료 횟수 +5회 충전</div>
+        <div class="text-sm text-gray-600 mb-2">생성 횟수 5회가 무료로 추가됩니다!</div>
         <div class="text-xs text-purple-600 bg-purple-50 px-3 py-1.5 rounded-full inline-block">
-          남은 광고 횟수: <span id="adQuotaRemaining" class="font-bold">3</span>/3회 (12시간 주기)
+          남은 충전 횟수: <span id="adQuotaRemaining" class="font-bold">3</span>/3회 (12시간 주기)
         </div>
       </div>
 
@@ -607,10 +602,8 @@
           취소하기
         </button>
         <button onclick="confirmAdForQuota()" class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-          </svg>
-          광고 시청
+          <span class="text-lg">🎁</span>
+          무료 충전
         </button>
       </div>
     </div>
@@ -621,9 +614,9 @@
   <div id="expandSlotsModal" class="modal-backdrop">
     <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl">
       <div class="text-center mb-6">
-        <div class="text-3xl mb-4">📺</div>
+        <div class="text-3xl mb-4">📦</div>
         <div class="text-lg font-bold text-gray-900 mb-2">슬롯 +5개 추가</div>
-        <div class="text-sm text-gray-600 mb-4">광고를 시청하면 최근 생성 번호 슬롯이 5개 추가됩니다</div>
+        <div class="text-sm text-gray-600 mb-4">최근 생성 번호 슬롯이 5개 추가됩니다!</div>
         <div class="bg-purple-50 rounded-xl p-3 text-sm">
           <div class="text-gray-700">현재 슬롯: <span class="font-bold text-purple-700"><span id="currentSlotsDisplay">5</span>개</span></div>
           <div class="text-gray-700">추가 후: <span class="font-bold text-purple-700"><span id="afterSlotsDisplay">10</span>개</span></div>
@@ -635,10 +628,8 @@
           취소
         </button>
         <button onclick="confirmExpandSlots()" class="flex-1 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold rounded-xl hover:from-purple-600 hover:to-purple-700 transition-all shadow-lg flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-          </svg>
-          광고보기
+          <span class="text-lg">📦</span>
+          슬롯 추가
         </button>
       </div>
     </div>
@@ -648,8 +639,8 @@
   <div id="pageAddConfirmModal" class="modal-backdrop">
     <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl">
       <div class="text-center mb-6">
-        <div class="text-lg font-bold text-gray-900 mb-4">광고 보고 <span id="nextPageNum">2</span>페이지 추가하기</div>
-        <div class="text-sm text-gray-600">광고를 시청하면 다음 페이지가 추가됩니다</div>
+        <div class="text-lg font-bold text-gray-900 mb-4"><span id="nextPageNum">2</span>페이지 추가하기</div>
+        <div class="text-sm text-gray-600">다음 페이지가 추가됩니다!</div>
       </div>
 
       <div class="flex gap-3">
@@ -657,10 +648,8 @@
           취소하기
         </button>
         <button onclick="confirmPageAdd()" class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-          </svg>
-          광고보기
+          <span class="text-lg">📄</span>
+          페이지 추가
         </button>
       </div>
     </div>
@@ -670,8 +659,8 @@
   <div id="savedPageAddConfirmModal" class="modal-backdrop">
     <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl">
       <div class="text-center mb-6">
-        <div class="text-lg font-bold text-gray-900 mb-4">광고 보고 <span id="nextSavedPageNum">2</span>페이지 추가하기</div>
-        <div class="text-sm text-gray-600">광고를 시청하면 다음 페이지가 추가됩니다</div>
+        <div class="text-lg font-bold text-gray-900 mb-4"><span id="nextSavedPageNum">2</span>페이지 추가하기</div>
+        <div class="text-sm text-gray-600">다음 페이지가 추가됩니다!</div>
       </div>
 
       <div class="flex gap-3">
@@ -679,10 +668,8 @@
           취소하기
         </button>
         <button onclick="confirmSavedPageAdd()" class="flex-1 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white font-bold rounded-xl hover:from-blue-600 hover:to-blue-700 transition-all shadow-lg flex items-center justify-center gap-2">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-          </svg>
-          광고보기
+          <span class="text-lg">📄</span>
+          페이지 추가
         </button>
       </div>
     </div>
@@ -977,7 +964,7 @@
           <ul class="list-disc list-inside space-y-1">
             <li>서비스는 무료로 제공됩니다.</li>
             <li>일일 생성 횟수 제한이 적용될 수 있습니다.</li>
-            <li>광고 시청을 통해 추가 기능을 이용할 수 있습니다.</li>
+            <li>무료 충전을 통해 추가 기능을 이용할 수 있습니다.</li>
           </ul>
         </div>
 
