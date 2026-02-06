@@ -151,8 +151,7 @@ function buildAnalysisText(result) {
   lines.push('');
   lines.push('긍정적인 신호가 보입니다. 지금의 선택과 실행이 쌓이면, 큰 전환점으로 이어질 수 있습니다. 오늘의 작은 시도가 내일의 결과를 만드는 흐름을 기억해보세요.');
   lines.push('');
-  lines.push('관상 핵심 키워드');
-  lines.push(result.storyline.points.map(p => `#${p}`).join(' '));
+  lines.push(`관상 핵심 키워드 ${result.storyline.points.map(p => `#${p}`).join(' ')}`);
   lines.push('────────────────');
   return lines.join('\n');
 }
