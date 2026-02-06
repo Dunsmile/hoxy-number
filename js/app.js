@@ -1037,21 +1037,27 @@
         return;
       }
 
-      // 2자리 입력 완료 시에만 중복 체크 (입력 중에는 체크하지 않음)
+      // 1자리 입력 중이면 아직 체크하지 않음 (10-19 등 입력 중일 수 있음)
+      // 2자리 완성 시에만 중복 체크
       if (currentValue.length < 2) {
         currentInput.classList.remove('border-red-500');
+        resetManualHint();
         return;
       }
 
-      // 다른 입력칸과 중복 체크
+      const currentNum = parseInt(currentValue);
+
+      // 다른 입력칸과 중복 체크 (숫자 값으로 비교)
       let hasDuplicate = false;
       for (let i = 1; i <= 6; i++) {
         if (i === currentIndex) continue;
         const otherInput = document.getElementById(`manualNum${i}`);
-        // 상대방도 2자리 완성된 경우에만 비교
-        if (otherInput && otherInput.value.length === 2 && otherInput.value === currentValue) {
-          hasDuplicate = true;
-          break;
+        if (otherInput && otherInput.value) {
+          const otherNum = parseInt(otherInput.value);
+          if (currentNum === otherNum) {
+            hasDuplicate = true;
+            break;
+          }
         }
       }
 
@@ -1740,14 +1746,19 @@
         return;
       }
 
-      // 같은 줄의 다른 입력값과 비교 (상대방도 2자리 완성된 경우에만)
+      const currentNum = parseInt(currentValue);
+
+      // 같은 줄의 다른 입력값과 비교 (숫자 값으로 비교)
       let hasDuplicate = false;
       for (let i = 1; i <= 6; i++) {
         if (i === currentFieldNum) continue;
         const otherInput = document.getElementById(`manual_${lineNum}_${i}`);
-        if (otherInput && otherInput.value.length === 2 && otherInput.value === currentValue) {
-          hasDuplicate = true;
-          break;
+        if (otherInput && otherInput.value) {
+          const otherNum = parseInt(otherInput.value);
+          if (currentNum === otherNum) {
+            hasDuplicate = true;
+            break;
+          }
         }
       }
 
