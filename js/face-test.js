@@ -96,6 +96,30 @@ const ANALYSIS_TEXTS = [
   "자기 통제형 관상입니다. 감정에 휘둘리지 않고 일관된 의사결정으로 목표에 도달하는 힘이 있습니다."
 ];
 
+const QUOTES = [
+  { title: '결국 남는 건 실행', quote: '생각은 누구나 하지만, 결과는 실행한 사람에게만 남습니다.' },
+  { title: '기회는 흐름 속에', quote: '흐름을 읽는 사람이 기회를 가장 먼저 잡습니다.' },
+  { title: '작은 습관의 힘', quote: '하루의 작은 선택이 결국 큰 차이를 만듭니다.' },
+  { title: '신뢰가 자산', quote: '신뢰는 쌓일수록 더 큰 기회를 불러옵니다.' },
+  { title: '타이밍의 감각', quote: '빠름보다 중요한 건, 정확한 타이밍입니다.' },
+  { title: '꾸준함이 이긴다', quote: '끝까지 남는 건 꾸준함입니다.' },
+  { title: '확신은 힘이 된다', quote: '확신은 주변을 설득하고 길을 열어줍니다.' },
+  { title: '균형이 성과다', quote: '균형 잡힌 판단이 장기 성과를 만듭니다.' }
+];
+
+const POINT_LABELS = [
+  '카리스마',
+  '분석가 기질',
+  '타고난 운',
+  '리더십',
+  '집중력',
+  '결단력',
+  '협업 능력',
+  '창의성',
+  '신뢰감',
+  '실행력'
+];
+
 const STORYLINES = [
   {
     points: ['열정', '실행력', '대인관계'],
@@ -141,6 +165,30 @@ const STORYLINES = [
 
 function pickStoryline(hash) {
   return STORYLINES[hash % STORYLINES.length];
+}
+
+function pickQuote(hash) {
+  return QUOTES[hash % QUOTES.length];
+}
+
+function pickPoints(hash) {
+  const labels = POINT_LABELS.slice();
+  const points = [];
+  let seed = hash;
+  for (let i = 0; i < 3; i++) {
+    const idx = seed % labels.length;
+    const label = labels.splice(idx, 1)[0];
+    const score = (seed % 6) + 3; // 3~8칸
+    points.push({ label, score });
+    seed = Math.floor(seed / 7) + i * 11 + 3;
+  }
+  return points;
+}
+
+function renderBar(score, max = 8) {
+  const filled = '◼︎'.repeat(Math.min(score, max));
+  const empty = '◻︎'.repeat(Math.max(0, max - score));
+  return filled + empty;
 }
 
 function buildAnalysisText(result) {
@@ -335,6 +383,8 @@ function startAnalysis() {
 
   const celebrityPool = selectedGender === 'female' ? CELEBRITIES_FEMALE : CELEBRITIES_MALE;
   const story = pickStoryline(hash);
+  const quote = pickQuote(hash);
+  const points = pickPoints(hash);
 
   testResult = {
     name: name,
@@ -346,6 +396,8 @@ function startAnalysis() {
     celebrity: celebrityPool[hash % celebrityPool.length],
     analysis: ANALYSIS_TEXTS[hash % ANALYSIS_TEXTS.length],
     storyline: story,
+    quote: quote,
+    points: points,
     luckMessage: LUCK_MESSAGES[hash % LUCK_MESSAGES.length],
     photo: uploadedPhotoData
   };
@@ -393,6 +445,16 @@ function displayResult() {
   document.getElementById('resultPhoto').src = testResult.photo;
   document.getElementById('resultCelebrity').textContent = testResult.celebrity.name;
   document.getElementById('resultCelebrityDesc').textContent = testResult.celebrity.desc;
+  document.getElementById('resultQuoteTitle').textContent = testResult.quote.title;
+  document.getElementById('resultQuoteText').textContent = testResult.quote.quote;
+
+  document.getElementById('pointLabel1').textContent = `관상 포인트1 · ${testResult.points[0].label}`;
+  document.getElementById('pointLabel2').textContent = `관상 포인트2 · ${testResult.points[1].label}`;
+  document.getElementById('pointLabel3').textContent = `관상 포인트3 · ${testResult.points[2].label}`;
+  document.getElementById('pointBar1').textContent = renderBar(testResult.points[0].score);
+  document.getElementById('pointBar2').textContent = renderBar(testResult.points[1].score);
+  document.getElementById('pointBar3').textContent = renderBar(testResult.points[2].score);
+
   document.getElementById('resultAnalysis').textContent = buildAnalysisText(testResult);
   document.getElementById('resultMatchType').textContent = `${testResult.storyline.match.name} · ${testResult.storyline.match.desc}`;
   document.getElementById('resultMismatchType').textContent = `${testResult.storyline.mismatch.name} · ${testResult.storyline.mismatch.desc}`;
@@ -418,6 +480,9 @@ async function saveToFirebase(result) {
       celebrity: result.celebrity.name,
       celebrityDesc: result.celebrity.desc,
       storylinePoints: result.storyline.points,
+      quoteTitle: result.quote.title,
+      quoteText: result.quote.quote,
+      points: result.points,
       matchType: result.storyline.match.name,
       matchDesc: result.storyline.match.desc,
       mismatchType: result.storyline.mismatch.name,
