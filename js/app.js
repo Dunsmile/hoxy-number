@@ -1116,8 +1116,14 @@
         return;
       }
 
-      // 저장 (기존 saveNumber 함수 사용)
+      // 최근 생성 번호에 추가 (사용자가 '생성'한 것으로 처리)
+      addToRecent(validation.numbers);
+
+      // 내 번호에 저장
       saveNumber(validation.numbers);
+
+      // UI 업데이트
+      updateUI();
 
       // 입력창 초기화
       clearManualInputs();
@@ -1627,24 +1633,25 @@
 
       const container = document.getElementById('manualInputLines');
       if (!container) return;
-      
+
       const lineDiv = document.createElement('div');
-      lineDiv.className = 'flex items-center gap-2';
+      lineDiv.className = 'flex items-center gap-1.5';
       lineDiv.innerHTML = `
-        <span class="text-xs text-gray-500 w-6">#${manualInputLineCount}</span>
+        <span class="text-xs text-gray-500 w-5 flex-shrink-0">#${manualInputLineCount}</span>
         ${[1,2,3,4,5,6].map(i => `
-          <input type="number" min="1" max="45" 
-                 class="number-input" 
+          <input type="text" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                 class="w-9 h-9 text-center text-base font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
                  id="manual_${manualInputLineCount}_${i}"
-                 onchange="validateManualInput(this)">
+                 oninput="onCheckManualInput(this, ${manualInputLineCount}, ${i})"
+                 placeholder="${i}">
         `).join('')}
-        <button onclick="removeManualInputLine(this)" class="text-red-500 hover:text-red-700 ml-auto">
+        <button onclick="removeManualInputLine(this)" class="text-red-500 hover:text-red-700 flex-shrink-0 ml-1">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
           </svg>
         </button>
       `;
-      
+
       container.appendChild(lineDiv);
       manualInputLineCount++;
     }
@@ -1659,9 +1666,9 @@
 
     function validateManualInput(input) {
       if (!input) return;
-      
+
       const value = parseInt(input.value);
-      
+
       if (value < 1 || value > 45) {
         input.value = '';
         showToast('1~45 사이의 숫자를 입력해주세요', 2000);
@@ -1674,6 +1681,30 @@
         input.classList.remove('filled');
       }
     }
+
+    // 당첨 확인 탭 직접 입력 핸들러 (중복 허용)
+    function onCheckManualInput(input, lineNum, fieldNum) {
+      // 숫자만 허용
+      input.value = input.value.replace(/[^0-9]/g, '');
+
+      // 범위 체크 (1~45)
+      if (input.value) {
+        const value = parseInt(input.value);
+        if (value > 45) {
+          input.value = '45';
+        } else if (value < 1 && input.value.length === 2) {
+          input.value = '1';
+        }
+      }
+
+      // 2자리 입력 시 다음 칸으로 자동 이동
+      if (input.value.length === 2 && fieldNum < 6) {
+        const nextInput = document.getElementById(`manual_${lineNum}_${fieldNum + 1}`);
+        if (nextInput) nextInput.focus();
+      }
+    }
+
+    window.onCheckManualInput = onCheckManualInput;
 
     function checkManualNumbers() {
       const lines = document.querySelectorAll('#manualInputLines > div');
