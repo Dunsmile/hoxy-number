@@ -1853,6 +1853,16 @@
           depletedMsgEl.style.display = 'none';
         }
       }
+
+      // 공유 배너: 할당량 0일 때만 표시
+      const shareBannerEl = document.getElementById('shareBanner');
+      if (shareBannerEl) {
+        if (quota.remaining <= 0) {
+          shareBannerEl.classList.remove('hidden');
+        } else {
+          shareBannerEl.classList.add('hidden');
+        }
+      }
     }
 
     function updateSavedUI() {
