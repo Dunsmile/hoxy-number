@@ -150,15 +150,15 @@
               <label class="text-sm font-semibold text-gray-700 block mb-2">생년월일</label>
               <div class="flex gap-2">
                 <input type="text" id="birthYear" maxlength="4" inputmode="numeric"
-                  class="flex-1 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-center"
+                  class="flex-[2] min-w-0 px-3 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-center"
                   placeholder="YYYY"
                   oninput="this.value = this.value.replace(/[^0-9]/g, ''); autoFocusNext(this, 'birthMonth', 4)">
                 <input type="text" id="birthMonth" maxlength="2" inputmode="numeric"
-                  class="w-20 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-center"
+                  class="flex-1 min-w-0 px-3 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-center"
                   placeholder="MM"
                   oninput="this.value = this.value.replace(/[^0-9]/g, ''); autoFocusNext(this, 'birthDay', 2)">
                 <input type="text" id="birthDay" maxlength="2" inputmode="numeric"
-                  class="w-20 px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-center"
+                  class="flex-1 min-w-0 px-3 py-3 border-2 border-gray-200 rounded-xl focus:border-purple-500 focus:outline-none text-center"
                   placeholder="DD"
                   oninput="this.value = this.value.replace(/[^0-9]/g, '')">
               </div>
