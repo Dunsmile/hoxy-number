@@ -7,7 +7,7 @@ let testResult = null;
 
 // ==================== 유명인 & 텍스트 데이터 ====================
 
-const CELEBRITIES = [
+const CELEBRITIES_MALE = [
   { name: '정주영', desc: '현대그룹 창업주' },
   { name: '이병철', desc: '삼성그룹 창업주' },
   { name: '빌 게이츠', desc: '마이크로소프트 창업자' },
@@ -29,6 +29,24 @@ const CELEBRITIES = [
   { name: '카를로스 슬림', desc: '텔멕스 회장' },
   { name: '무케시 암바니', desc: '릴라이언스 회장' },
   { name: '아만시오 오르테가', desc: '인디텍스 창업자' }
+];
+
+const CELEBRITIES_FEMALE = [
+  { name: '오프라 윈프리', desc: '미디어 기업가' },
+  { name: '사라 블레이클리', desc: '스팽스 창업자' },
+  { name: '멜린다 프렌치 게이츠', desc: '필란트로피 리더' },
+  { name: '매켄지 스콧', desc: '작가·투자자' },
+  { name: '수잔 보이치키', desc: '전 유튜브 CEO' },
+  { name: '인드라 누이', desc: '전 펩시코 CEO' },
+  { name: '메리 바라', desc: 'GM CEO' },
+  { name: '지니 로메티', desc: '전 IBM CEO' },
+  { name: '애비게일 존슨', desc: '피델리티 CEO' },
+  { name: '구글라 고빈다라잔', desc: '글로벌 투자자' },
+  { name: '로린 파월 잡스', desc: '에머슨 콜렉티브' },
+  { name: '리사 수', desc: 'AMD CEO' },
+  { name: '휘트니 울프 허드', desc: '범블 창업자' },
+  { name: '카트리나 레이크', desc: '스티치 픽스 창업자' },
+  { name: '룬쥐 수전 린', desc: '아시아 투자자' }
 ];
 
 const LUCK_MESSAGES = [
@@ -55,21 +73,60 @@ const LUCK_MESSAGES = [
 ];
 
 const ANALYSIS_TEXTS = [
-  "당신의 얼굴에서 강한 의지와 결단력이 느껴집니다. 특히 눈빛이 흔들림 없이 목표를 향해 가는 타입이라, 중요한 순간에 큰 결정을 잘 내리는 편입니다. 꾸준함과 추진력이 결합되어 장기적으로 자산을 키우는 상입니다.",
-  "부드러우면서도 날카로운 인상이 균형을 이루고 있습니다. 사람을 편하게 만드는 친화력과 일 처리를 빠르게 끝내는 실행력이 함께 보여, 사업·프로젝트에서 신뢰를 얻기 좋은 관상입니다.",
-  "끈기와 인내의 기운이 강하게 느껴집니다. 한 번 시작한 일은 끝까지 해내는 성향이라 장기 투자나 누적형 성과에서 강점을 보입니다. 시간이 지날수록 안정적으로 성장하는 타입입니다.",
-  "독창적인 발상이 돋보이는 상입니다. 남들이 하지 않는 방법을 먼저 시도하는 감각이 있어, 신규 서비스나 신사업에서 기회를 잡기 쉽습니다. 변화에 대한 두려움이 적은 편입니다.",
-  "리더십의 기운이 드러납니다. 조직 안에서 중심을 잡고 사람을 모으는 타입으로, 팀을 꾸려 성과를 내기 좋습니다. 책임을 지는 성향이 강해 위기 상황에도 중심을 유지합니다.",
-  "섬세함과 대담함이 공존합니다. 위험을 감지하는 직감이 있고, 타이밍이 맞을 때는 과감한 선택을 할 수 있어 투자나 사업에서 수익 구간을 잘 포착합니다.",
-  "인덕이 있는 상입니다. 주변 사람들과의 관계가 기회를 만들어주는 타입이라 협업이나 소개를 통해 좋은 흐름이 생깁니다. 인맥이 곧 자산이 되는 경우가 많습니다.",
-  "분석력과 직감이 균형 있게 발달했습니다. 숫자와 데이터 흐름을 읽는 능력이 있어 금융, 전략, 기획 분야에서 강점을 가질 가능성이 높습니다.",
-  "장기적 관점이 강한 타입입니다. 단기 이익보다 큰 흐름을 보며 꾸준히 축적하는 경향이 있어, 시간이 지날수록 안정적인 부를 만드는 상입니다.",
-  "도전과 변화를 즐기는 모험가의 기운이 있습니다. 새로운 기회를 빠르게 캐치하는 편이라 여러 번의 성장 기회를 경험할 가능성이 높습니다.",
-  "균형 잡힌 인상으로 신뢰를 얻는 상입니다. 말보다 행동으로 증명하는 성향이 있어, 장기 파트너십과 안정적 사업 운영에 유리합니다.",
-  "결과 지향적인 성향이 강합니다. 목표를 세우고 단기간 집중해 성과를 만드는 데 강점이 있어, 프로젝트형 업무에서 두각을 나타냅니다.",
-  "현실 감각이 뛰어난 타입입니다. 수입과 지출의 균형을 잘 잡아, 리스크를 크게 늘리지 않고도 안정적인 성장을 만들어냅니다.",
-  "자기 통제력이 돋보입니다. 감정에 휘둘리지 않는 편이라 의사결정이 일관되고, 장기 목표를 향해 안정적으로 전진할 수 있습니다."
+  "당신은 중요한 순간에 결단을 내릴 줄 아는 타입입니다. 목표를 향해 흔들림 없이 나아가며, 짧은 기회도 놓치지 않습니다. 이런 관상은 추진력과 안정감을 동시에 보여줍니다.",
+  "부드러움 속에 강한 중심이 느껴집니다. 사람을 편안하게 만드는 인상과 빠른 실행력이 함께 보여, 신뢰와 성과를 동시에 얻기 좋은 관상입니다.",
+  "끈기와 인내가 강점인 타입입니다. 단기 성과보다 꾸준한 누적을 선호해 장기 프로젝트에서 특히 빛납니다. 시간이 지날수록 안정적인 성장 곡선을 만들 수 있습니다.",
+  "창의성과 도전성이 뚜렷합니다. 새로운 관점을 제시하고 변화를 받아들이는 데 강점이 있어, 신사업이나 혁신 프로젝트에서 운이 따라옵니다.",
+  "리더십과 책임감이 드러납니다. 조직의 중심을 잡아주고, 위기 상황에서도 침착하게 방향을 제시할 수 있는 타입입니다.",
+  "섬세함과 대담함의 균형형입니다. 위험 신호를 감지하면서도, 확신이 서면 과감하게 움직이는 강점을 가지고 있습니다.",
+  "인덕형 관상입니다. 사람 사이에서 신뢰를 쌓고 도움을 받는 타입이라, 협업과 네트워크가 성장의 열쇠가 됩니다.",
+  "분석형 관상입니다. 숫자와 흐름을 읽는 능력이 좋아, 전략·기획·투자 분야에서 두각을 나타낼 가능성이 높습니다.",
+  "장기형 관상입니다. 큰 그림을 보며 꾸준히 축적하는 성향이라, 시간이 지날수록 안정적으로 부를 쌓는 타입입니다.",
+  "모험가형 관상입니다. 변화와 도전을 즐기며, 시장의 흐름이 바뀌는 순간 기회를 잘 포착합니다.",
+  "신뢰형 관상입니다. 말보다 행동으로 보여주는 스타일이라, 안정적 파트너십과 장기 협업에서 강점이 있습니다.",
+  "성과 집중형 관상입니다. 목표를 세우고 집중해 단기간에 성과를 만드는 데 능하며, 프로젝트형 업무에 특히 강합니다.",
+  "현실 감각형 관상입니다. 리스크를 키우기보다 균형을 중시해 안정적인 자산 흐름을 만들 수 있습니다.",
+  "자기 통제형 관상입니다. 감정에 휘둘리지 않고 일관된 의사결정으로 목표에 도달하는 힘이 있습니다."
 ];
+
+const STORYLINES = [
+  {
+    points: ['열정', '실행력', '대인관계'],
+    core: { title: '핵심 관상 포인트', desc: '눈빛의 집중력과 입매의 단단함이 보입니다. 사람과 목표 사이에서 균형을 잡는 힘이 강해 실행 속도가 빠른 타입입니다.' },
+    motiv: { title: '동기부여 문구', desc: '당신은 한번 정한 목표를 끝까지 밀고 나갈 수 있는 사람입니다. 오늘의 작은 실행이 내일의 큰 변화를 만듭니다.' },
+    hope: '이런 흐름은 작은 기회가 큰 전환점이 되는 패턴과 닮아 있습니다. 지금의 선택이 다음 단계의 문을 열 수 있습니다.',
+    match: { name: '리더형', desc: '결단과 추진력이 강해 팀을 이끄는 역할과 잘 맞습니다.' },
+    mismatch: { name: '우유부단형', desc: '과도한 망설임은 당신의 강점인 실행력을 약화시킬 수 있습니다.' }
+  },
+  {
+    points: ['분석력', '지속력', '안정감'],
+    core: { title: '핵심 관상 포인트', desc: '이마의 균형과 눈썹 라인이 안정적으로 보입니다. 판단이 신중하고 흐름을 길게 보는 타입입니다.' },
+    motiv: { title: '동기부여 문구', desc: '당신의 강점은 꾸준함입니다. 작은 누적이 결국 큰 성과로 돌아옵니다.' },
+    hope: '큰 흐름을 읽는 눈이 있는 만큼, 당신에게도 긴 호흡의 기회가 찾아올 가능성이 높습니다.',
+    match: { name: '축적형', desc: '장기 관점에서 자산을 쌓는 성향과 잘 맞습니다.' },
+    mismatch: { name: '단기 과열형', desc: '단기 성과에만 몰입하면 본래의 안정감이 흔들릴 수 있습니다.' }
+  },
+  {
+    points: ['창의력', '도전성', '직감'],
+    core: { title: '핵심 관상 포인트', desc: '표정에서 자유로운 상상력과 도전 기질이 느껴집니다. 새로운 환경에서도 빠르게 적응하는 힘이 있습니다.' },
+    motiv: { title: '동기부여 문구', desc: '당신에게는 새 길을 여는 힘이 있습니다. 익숙함보다 가능성을 선택할 때 빛납니다.' },
+    hope: '시장 변화가 큰 시점일수록 당신 같은 타입이 주인공이 되기 쉽습니다.',
+    match: { name: '도전형', desc: '빠른 시도와 실행이 필요한 환경에서 강점이 극대화됩니다.' },
+    mismatch: { name: '변화거부형', desc: '변화를 피하면 당신의 창의성이 제한될 수 있습니다.' }
+  },
+  {
+    points: ['통찰력', '판단력', '신뢰감'],
+    core: { title: '핵심 관상 포인트', desc: '눈매와 인상의 조화가 뛰어나며, 결정에 설득력을 부여하는 힘이 있습니다.' },
+    motiv: { title: '동기부여 문구', desc: '당신의 판단은 주변에 신뢰를 줍니다. 한 번의 결정이 큰 흐름을 바꿀 수 있습니다.' },
+    hope: '신뢰를 기반으로 기회를 넓히는 타입이라, 중요한 순간에 길이 열릴 가능성이 높습니다.',
+    match: { name: '전략형', desc: '큰 그림을 그리고 방향을 제시하는 역할과 잘 맞습니다.' },
+    mismatch: { name: '충동형', desc: '즉흥적인 선택은 당신의 신뢰도를 떨어뜨릴 수 있습니다.' }
+  }
+];
+
+function pickStoryline(hash) {
+  return STORYLINES[hash % STORYLINES.length];
+}
 
 const MATCH_TYPES = [
   "리더형·결단형",
@@ -243,6 +300,9 @@ function startAnalysis() {
   const uniqueKey = name + birthDate + selectedGender;
   const hash = hashCode(uniqueKey);
 
+  const celebrityPool = selectedGender === 'female' ? CELEBRITIES_FEMALE : CELEBRITIES_MALE;
+  const story = pickStoryline(hash);
+
   testResult = {
     name: name,
     gender: selectedGender,
@@ -250,10 +310,9 @@ function startAnalysis() {
     hash: hash,
     richPercent: (hash % 30) + 65,        // 65~94%
     luckPercent: (hash % 40) + 50,        // 50~89%
-    celebrity: CELEBRITIES[hash % CELEBRITIES.length],
+    celebrity: celebrityPool[hash % celebrityPool.length],
     analysis: ANALYSIS_TEXTS[hash % ANALYSIS_TEXTS.length],
-    matchType: MATCH_TYPES[hash % MATCH_TYPES.length],
-    mismatchType: MISMATCH_TYPES[(hash * 7) % MISMATCH_TYPES.length],
+    storyline: story,
     luckMessage: LUCK_MESSAGES[hash % LUCK_MESSAGES.length],
     photo: uploadedPhotoData
   };
@@ -302,8 +361,12 @@ function displayResult() {
   document.getElementById('resultCelebrity').textContent = testResult.celebrity.name;
   document.getElementById('resultCelebrityDesc').textContent = testResult.celebrity.desc;
   document.getElementById('resultAnalysis').textContent = testResult.analysis;
-  document.getElementById('resultMatchType').textContent = testResult.matchType;
-  document.getElementById('resultMismatchType').textContent = testResult.mismatchType;
+  document.getElementById('resultPoints').textContent = testResult.storyline.points.map(p => `#${p}`).join(' ');
+  document.getElementById('resultCoreText').textContent = testResult.storyline.core.desc;
+  document.getElementById('resultMotivText').textContent = testResult.storyline.motiv.desc;
+  document.getElementById('resultHopeText').textContent = testResult.storyline.hope;
+  document.getElementById('resultMatchType').textContent = `${testResult.storyline.match.name} · ${testResult.storyline.match.desc}`;
+  document.getElementById('resultMismatchType').textContent = `${testResult.storyline.mismatch.name} · ${testResult.storyline.mismatch.desc}`;
   document.getElementById('luckPercent').textContent = testResult.luckPercent;
   document.getElementById('luckBar').style.width = testResult.luckPercent + '%';
   document.getElementById('luckMessage').textContent = `"${testResult.luckMessage}"`;
@@ -325,8 +388,14 @@ async function saveToFirebase(result) {
       luckPercent: result.luckPercent,
       celebrity: result.celebrity.name,
       celebrityDesc: result.celebrity.desc,
-      matchType: result.matchType,
-      mismatchType: result.mismatchType,
+      storylinePoints: result.storyline.points,
+      storylineCore: result.storyline.core.desc,
+      storylineMotiv: result.storyline.motiv.desc,
+      storylineHope: result.storyline.hope,
+      matchType: result.storyline.match.name,
+      matchDesc: result.storyline.match.desc,
+      mismatchType: result.storyline.mismatch.name,
+      mismatchDesc: result.storyline.mismatch.desc,
       createdAt: firebase.firestore.FieldValue.serverTimestamp()
     });
     console.log('Face test result saved to Firebase');
