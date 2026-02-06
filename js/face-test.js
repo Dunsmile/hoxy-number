@@ -129,12 +129,56 @@ function showToast(message, duration = 2000) {
   }
 }
 
+// ==================== 생년월일 입력 자동 포커스 ====================
+
+function autoFocusNext(currentInput, nextId, maxLength) {
+  if (currentInput.value.length >= maxLength) {
+    const nextInput = document.getElementById(nextId);
+    if (nextInput) nextInput.focus();
+  }
+}
+
+// 생년월일 값 조합
+function getBirthDate() {
+  const year = document.getElementById('birthYear').value.trim();
+  const month = document.getElementById('birthMonth').value.trim().padStart(2, '0');
+  const day = document.getElementById('birthDay').value.trim().padStart(2, '0');
+
+  if (!year || !month || !day) return null;
+  if (year.length !== 4) return null;
+
+  return `${year}-${month}-${day}`;
+}
+
+// 생년월일 유효성 검사
+function validateBirthDate() {
+  const year = document.getElementById('birthYear').value.trim();
+  const month = document.getElementById('birthMonth').value.trim();
+  const day = document.getElementById('birthDay').value.trim();
+
+  if (!year || year.length !== 4) {
+    showToast('생년(4자리)을 입력해주세요', 2000);
+    document.getElementById('birthYear').focus();
+    return false;
+  }
+  if (!month || parseInt(month) < 1 || parseInt(month) > 12) {
+    showToast('월(1~12)을 입력해주세요', 2000);
+    document.getElementById('birthMonth').focus();
+    return false;
+  }
+  if (!day || parseInt(day) < 1 || parseInt(day) > 31) {
+    showToast('일(1~31)을 입력해주세요', 2000);
+    document.getElementById('birthDay').focus();
+    return false;
+  }
+  return true;
+}
+
 // ==================== 분석 시작 ====================
 
 function startAnalysis() {
   // 유효성 검사
   const name = document.getElementById('userName').value.trim();
-  const birthDate = document.getElementById('birthDate').value;
   const agreeTerms = document.getElementById('agreeTerms').checked;
 
   if (!name) {
@@ -145,10 +189,10 @@ function startAnalysis() {
     showToast('성별을 선택해주세요', 2000);
     return;
   }
-  if (!birthDate) {
-    showToast('생년월일을 입력해주세요', 2000);
+  if (!validateBirthDate()) {
     return;
   }
+  const birthDate = getBirthDate();
   if (!uploadedPhotoData) {
     showToast('사진을 업로드해주세요', 2000);
     return;
@@ -288,7 +332,9 @@ function retakeTest() {
 
   // 폼 초기화
   document.getElementById('userName').value = '';
-  document.getElementById('birthDate').value = '';
+  document.getElementById('birthYear').value = '';
+  document.getElementById('birthMonth').value = '';
+  document.getElementById('birthDay').value = '';
   document.getElementById('photoInput').value = '';
   document.getElementById('agreeTerms').checked = false;
 
@@ -334,3 +380,4 @@ window.shareResult = shareResult;
 window.retakeTest = retakeTest;
 window.openServiceMenu = openServiceMenu;
 window.closeServiceMenu = closeServiceMenu;
+window.autoFocusNext = autoFocusNext;
