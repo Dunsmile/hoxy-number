@@ -113,17 +113,23 @@
 
         <!-- Top Navigation -->
         <div class="sticky top-0 bg-white border-b border-gray-200 z-10 shadow-sm">
-          <div class="flex items-center justify-between px-4 h-14">
-            <div class="flex items-center gap-3">
-              <button onclick="openServiceMenu()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors -ml-2" data-analytics="cta_click|face_test|gnb|service_menu_open|">
+            <div class="flex items-center justify-between px-4 h-14">
+              <div class="flex items-center gap-3">
+                <button onclick="openServiceMenu()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors -ml-2" data-analytics="cta_click|face_test|gnb|service_menu_open|">
+                  <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                  </svg>
+                </button>
+                <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">부자가 될 상인가?</h1>
+              </div>
+              <button onclick="openSettings()" class="p-2 hover:bg-gray-100 rounded-lg transition-colors" data-analytics="cta_click|face_test|gnb|open_settings|">
                 <svg class="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
               </button>
-              <h1 class="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">부자가 될 상인가?</h1>
             </div>
           </div>
-        </div>
 
         <!-- Step 1: 입력 폼 -->
         <div id="step1" class="step active p-4 space-y-4">
@@ -309,10 +315,6 @@
               <p class="font-semibold text-gray-600">⚠️ 참고 사항</p>
               <p>• 본 테스트는 오락 목적으로 제작되었으며, 과학적 근거가 없습니다.</p>
               <p>• 수집된 개인정보는 테스트 결과 생성 목적으로만 사용됩니다.</p>
-              <p>• 본 서비스는 Google Analytics 및 Google AdSense를 사용하며, 쿠키 또는 유사한 식별자를 사용할 수 있습니다.</p>
-              <p>• Google의 데이터 처리 방식: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" class="text-blue-600 underline">Google 파트너 사이트 정책</a></p>
-              <p>• 광고 개인화 설정: <a href="https://www.google.com/settings/ads" target="_blank" class="text-blue-600 underline">Google 광고 설정</a></p>
-              <p>• Analytics 수집 거부: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" class="text-blue-600 underline">Google Analytics Opt-out Add-on</a></p>
               <p>• 업로드된 사진은 결과 표시 후 즉시 삭제되며 서버에 저장되지 않습니다.</p>
               <p>• 테스트 결과는 재미로만 참고해 주세요.</p>
             </div>
@@ -390,6 +392,152 @@
       <div class="text-xs text-gray-500 text-center">
         <p>HOXY 서비스 v1.0</p>
         <p class="mt-1">© 2026 HOXY. All rights reserved</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 설정 모달 -->
+  <div id="settingsModal" class="modal-backdrop" onclick="if(event.target === this) closeSettings()">
+    <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900">설정</h3>
+        <button onclick="closeSettings()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="space-y-2">
+        <button onclick="openAboutModal()" class="w-full text-left px-4 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors" data-analytics="cta_click|face_test|settings|open_about|">
+          서비스 소개
+        </button>
+        <button onclick="openPrivacyModal()" class="w-full text-left px-4 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors" data-analytics="cta_click|face_test|settings|open_privacy|">
+          개인정보처리방침
+        </button>
+        <button onclick="openTermsModal()" class="w-full text-left px-4 py-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors" data-analytics="cta_click|face_test|settings|open_terms|">
+          이용약관
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 서비스 소개 모달 -->
+  <div id="aboutModal" class="modal-backdrop" onclick="if(event.target === this) closeAboutModal()">
+    <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900">서비스 소개</h3>
+        <button onclick="closeAboutModal()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="text-sm text-gray-600 space-y-4">
+        <p class="text-xs text-gray-400">시행일: 2026년 2월 6일</p>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">1. 서비스 목적</h4>
+          <p>HOXY의 관상 테스트는 재미와 흥미를 위한 콘텐츠입니다. 입력 정보를 바탕으로 간단한 설명과 결과를 제공합니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">2. 콘텐츠 품질 원칙</h4>
+          <p>본 서비스는 사용자가 기대하는 정보를 명확하게 제공하고, 동일하거나 반복되는 내용 없이 고유한 설명을 제공합니다.</p>
+          <p class="mt-2">광고는 콘텐츠를 방해하지 않도록 배치하며, 콘텐츠 중심의 페이지 구성을 유지합니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">3. 페이지 구성</h4>
+          <p>페이지는 이해하기 쉬운 구조로 구성되며, 사용자 경험을 해치지 않는 탐색 흐름을 제공합니다.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 개인정보처리방침 모달 -->
+  <div id="privacyModal" class="modal-backdrop" onclick="if(event.target === this) closePrivacyModal()">
+    <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900">개인정보처리방침</h3>
+        <button onclick="closePrivacyModal()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="text-sm text-gray-600 space-y-4">
+        <p class="text-xs text-gray-400">시행일: 2026년 2월 6일</p>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">1. 수집하는 정보</h4>
+          <p>테스트 진행을 위해 이름, 성별, 생년월일을 입력받으며, 사진은 결과 표시 후 즉시 삭제됩니다.</p>
+          <p class="mt-2">서비스 통계 분석 및 광고 제공을 위해 기기 정보, 브라우저 유형, 접속 로그가 자동 수집될 수 있습니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">2. 이용 목적</h4>
+          <p>테스트 결과 생성, 서비스 운영, 품질 개선, 통계 분석, 광고 제공을 위해 사용합니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">3. 쿠키 및 분석/광고</h4>
+          <p>본 서비스는 Google Analytics 및 Google AdSense를 사용하며, 쿠키 또는 유사한 식별자를 사용할 수 있습니다.</p>
+          <p class="mt-2">Google의 데이터 처리 방식: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" class="text-blue-600 underline">Google 파트너 사이트 정책</a></p>
+          <p class="mt-2">광고 개인화 설정: <a href="https://www.google.com/settings/ads" target="_blank" class="text-blue-600 underline">Google 광고 설정</a></p>
+          <p class="mt-2">Analytics 수집 거부: <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" class="text-blue-600 underline">Google Analytics Opt-out Add-on</a></p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">4. 보관 및 파기</h4>
+          <p>입력 정보는 테스트 결과 생성 목적에 필요한 범위에서만 처리되며, 목적 달성 후 파기됩니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">5. 문의</h4>
+          <p>개인정보 관련 문의: poilkjmnb122@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 이용약관 모달 -->
+  <div id="termsModal" class="modal-backdrop" onclick="if(event.target === this) closeTermsModal()">
+    <div class="bg-white rounded-2xl p-6 max-w-[480px] w-full mx-4 shadow-2xl max-h-[80vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-lg font-bold text-gray-900">이용약관</h3>
+        <button onclick="closeTermsModal()" class="text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="text-sm text-gray-600 space-y-4">
+        <p class="text-xs text-gray-400">시행일: 2026년 2월 6일</p>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">1. 서비스 이용</h4>
+          <p>본 서비스는 오락 목적의 관상 테스트 콘텐츠를 제공합니다. 결과는 참고용이며 사실을 보장하지 않습니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">2. 금지 행위</h4>
+          <p>서비스의 정상적 운영을 방해하거나 타인의 권리를 침해하는 행위를 금지합니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">3. 콘텐츠 및 광고</h4>
+          <p>본 서비스는 사용자에게 유용한 정보를 제공하는 것을 목표로 하며, 콘텐츠를 방해하지 않는 방식으로 광고를 배치합니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">4. 약관 변경</h4>
+          <p>약관은 서비스 정책에 따라 변경될 수 있으며, 변경 시 서비스 내 공지합니다.</p>
+        </div>
+
+        <div>
+          <h4 class="font-bold text-gray-900 mb-2">5. 문의</h4>
+          <p>서비스 관련 문의: poilkjmnb122@gmail.com</p>
+        </div>
       </div>
     </div>
   </div>

@@ -371,6 +371,50 @@ function closeServiceMenu() {
   }
 }
 
+// ==================== 설정 ====================
+
+function openSettings() {
+  const modalEl = document.getElementById('settingsModal');
+  if (modalEl) modalEl.classList.add('active');
+}
+
+function closeSettings() {
+  const modalEl = document.getElementById('settingsModal');
+  if (modalEl) modalEl.classList.remove('active');
+}
+
+// ==================== 기타 정보 모달 ====================
+
+function openAboutModal() {
+  const modalEl = document.getElementById('aboutModal');
+  if (modalEl) modalEl.classList.add('active');
+}
+
+function closeAboutModal() {
+  const modalEl = document.getElementById('aboutModal');
+  if (modalEl) modalEl.classList.remove('active');
+}
+
+function openPrivacyModal() {
+  const modalEl = document.getElementById('privacyModal');
+  if (modalEl) modalEl.classList.add('active');
+}
+
+function closePrivacyModal() {
+  const modalEl = document.getElementById('privacyModal');
+  if (modalEl) modalEl.classList.remove('active');
+}
+
+function openTermsModal() {
+  const modalEl = document.getElementById('termsModal');
+  if (modalEl) modalEl.classList.add('active');
+}
+
+function closeTermsModal() {
+  const modalEl = document.getElementById('termsModal');
+  if (modalEl) modalEl.classList.remove('active');
+}
+
 // ==================== 전역 함수 노출 ====================
 
 window.selectGender = selectGender;
@@ -380,4 +424,12 @@ window.shareResult = shareResult;
 window.retakeTest = retakeTest;
 window.openServiceMenu = openServiceMenu;
 window.closeServiceMenu = closeServiceMenu;
+window.openSettings = openSettings;
+window.closeSettings = closeSettings;
+window.openAboutModal = openAboutModal;
+window.closeAboutModal = closeAboutModal;
+window.openPrivacyModal = openPrivacyModal;
+window.closePrivacyModal = closePrivacyModal;
+window.openTermsModal = openTermsModal;
+window.closeTermsModal = closeTermsModal;
 window.autoFocusNext = autoFocusNext;
