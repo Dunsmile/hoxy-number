@@ -2194,14 +2194,42 @@
 
       if (messageEl) messageEl.textContent = lucky.message;
 
-      if (lucky.revealed && blurredEl && revealEl) {
-        blurredEl.style.filter = 'none';
-        blurredEl.innerHTML = renderNumberBalls(lucky.numbers);
-        revealEl.style.display = 'none';
-
-        // 저장 버튼 표시
+      if (lucky.revealed) {
+        // 공개 상태: 블러 제거, 버튼 숨김, 저장 버튼 표시
+        if (blurredEl) {
+          blurredEl.style.filter = 'none';
+          blurredEl.innerHTML = renderNumberBalls(lucky.numbers);
+        }
+        if (revealEl) {
+          revealEl.style.display = 'none';
+        }
         if (actionsEl) {
           actionsEl.classList.remove('hidden');
+        }
+      } else {
+        // 미공개 상태: 블러 적용, 버튼 표시, 저장 버튼 숨김
+        if (blurredEl) {
+          blurredEl.style.filter = 'blur(8px)';
+          blurredEl.innerHTML = `
+            <div class="number-ball bg-gradient-to-br from-yellow-400 to-orange-400 rounded-full"></div>
+            <div class="number-ball bg-gradient-to-br from-blue-400 to-blue-600 rounded-full"></div>
+            <div class="number-ball bg-gradient-to-br from-red-400 to-red-600 rounded-full"></div>
+            <div class="number-ball bg-gradient-to-br from-gray-400 to-gray-600 rounded-full"></div>
+            <div class="number-ball bg-gradient-to-br from-green-400 to-green-600 rounded-full"></div>
+            <div class="number-ball bg-gradient-to-br from-green-500 to-green-700 rounded-full"></div>
+          `;
+        }
+        if (revealEl) {
+          revealEl.style.display = 'flex';
+          revealEl.innerHTML = `
+            <button onclick="revealLuckyNumber()" class="bg-gradient-to-r from-purple-600 to-purple-700 text-white px-4 py-2.5 rounded-full font-bold text-xs shadow-2xl hover:shadow-purple-500/50 hover:scale-105 transition-all flex items-center gap-1.5">
+              <span>🍀</span>
+              오늘의 럭키 넘버는?!
+            </button>
+          `;
+        }
+        if (actionsEl) {
+          actionsEl.classList.add('hidden');
         }
       }
     }
