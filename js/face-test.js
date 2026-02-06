@@ -98,65 +98,41 @@ const ANALYSIS_TEXTS = [
 const STORYLINES = [
   {
     points: ['열정', '실행력', '대인관계'],
-    core: { title: '핵심 관상 포인트', desc: '눈빛의 집중력과 입매의 단단함이 보입니다. 사람과 목표 사이에서 균형을 잡는 힘이 강해 실행 속도가 빠른 타입입니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신은 한번 정한 목표를 끝까지 밀고 나갈 수 있는 사람입니다. 오늘의 작은 실행이 내일의 큰 변화를 만듭니다.' },
-    hope: '이런 흐름은 작은 기회가 큰 전환점이 되는 패턴과 닮아 있습니다. 지금의 선택이 다음 단계의 문을 열 수 있습니다.',
     match: { name: '리더형', desc: '결단과 추진력이 강해 팀을 이끄는 역할과 잘 맞습니다.' },
     mismatch: { name: '우유부단형', desc: '과도한 망설임은 당신의 강점인 실행력을 약화시킬 수 있습니다.' }
   },
   {
     points: ['분석력', '지속력', '안정감'],
-    core: { title: '핵심 관상 포인트', desc: '이마의 균형과 눈썹 라인이 안정적으로 보입니다. 판단이 신중하고 흐름을 길게 보는 타입입니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신의 강점은 꾸준함입니다. 작은 누적이 결국 큰 성과로 돌아옵니다.' },
-    hope: '큰 흐름을 읽는 눈이 있는 만큼, 당신에게도 긴 호흡의 기회가 찾아올 가능성이 높습니다.',
     match: { name: '축적형', desc: '장기 관점에서 자산을 쌓는 성향과 잘 맞습니다.' },
     mismatch: { name: '단기 과열형', desc: '단기 성과에만 몰입하면 본래의 안정감이 흔들릴 수 있습니다.' }
   },
   {
     points: ['창의력', '도전성', '직감'],
-    core: { title: '핵심 관상 포인트', desc: '표정에서 자유로운 상상력과 도전 기질이 느껴집니다. 새로운 환경에서도 빠르게 적응하는 힘이 있습니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신에게는 새 길을 여는 힘이 있습니다. 익숙함보다 가능성을 선택할 때 빛납니다.' },
-    hope: '시장 변화가 큰 시점일수록 당신 같은 타입이 주인공이 되기 쉽습니다.',
     match: { name: '도전형', desc: '빠른 시도와 실행이 필요한 환경에서 강점이 극대화됩니다.' },
     mismatch: { name: '변화거부형', desc: '변화를 피하면 당신의 창의성이 제한될 수 있습니다.' }
   },
   {
     points: ['통찰력', '판단력', '신뢰감'],
-    core: { title: '핵심 관상 포인트', desc: '눈매와 인상의 조화가 뛰어나며, 결정에 설득력을 부여하는 힘이 있습니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신의 판단은 주변에 신뢰를 줍니다. 한 번의 결정이 큰 흐름을 바꿀 수 있습니다.' },
-    hope: '신뢰를 기반으로 기회를 넓히는 타입이라, 중요한 순간에 길이 열릴 가능성이 높습니다.',
     match: { name: '전략형', desc: '큰 그림을 그리고 방향을 제시하는 역할과 잘 맞습니다.' },
     mismatch: { name: '충동형', desc: '즉흥적인 선택은 당신의 신뢰도를 떨어뜨릴 수 있습니다.' }
   },
   {
     points: ['집중력', '몰입', '완성도'],
-    core: { title: '핵심 관상 포인트', desc: '시선의 고정감과 표정의 응집력이 보입니다. 한 가지를 깊게 파고드는 힘이 강합니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신의 몰입은 결과를 바꾸는 힘입니다. 깊이 있는 실행이 큰 차이를 만듭니다.' },
-    hope: '꾸준한 집중은 결국 차별점을 만들고, 그 차별점이 기회로 이어질 수 있습니다.',
     match: { name: '몰입형', desc: '집중과 완성도가 높은 환경에서 최고의 성과를 냅니다.' },
     mismatch: { name: '분산형', desc: '여러 일을 동시에 벌이면 강점이 분산될 수 있습니다.' }
   },
   {
     points: ['균형감', '조율력', '설득력'],
-    core: { title: '핵심 관상 포인트', desc: '표정의 균형과 부드러운 인상이 보입니다. 의견을 조율하고 신뢰를 만드는 힘이 큽니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신의 조율 능력은 팀과 기회를 키웁니다. 사람을 살리는 판단이 큰 성과로 돌아옵니다.' },
-    hope: '신뢰를 만드는 힘은 오래 지속되는 기회를 부릅니다.',
     match: { name: '조율형', desc: '협업이 중요한 환경에서 신뢰를 빠르게 구축합니다.' },
     mismatch: { name: '독단형', desc: '독단적 접근은 본래의 강점과 충돌합니다.' }
   },
   {
     points: ['속도', '결단', '기회감지'],
-    core: { title: '핵심 관상 포인트', desc: '표정에서 스피드와 추진력이 느껴집니다. 기회를 감지하면 즉시 움직이는 타입입니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신은 빠른 실행이 강점입니다. 타이밍을 잡는 순간, 결과가 따라옵니다.' },
-    hope: '시장의 빈틈은 빠른 사람에게 열립니다. 당신의 타이밍이 빛날 가능성이 큽니다.',
     match: { name: '스피드형', desc: '빠른 의사결정과 실행이 필요한 환경에서 강합니다.' },
     mismatch: { name: '지나친 신중형', desc: '과도한 검토는 기회를 놓치게 할 수 있습니다.' }
   },
   {
     points: ['신념', '일관성', '책임감'],
-    core: { title: '핵심 관상 포인트', desc: '표정이 단단하고 흔들림이 적습니다. 원칙을 지키며 책임을 다하는 타입입니다.' },
-    motiv: { title: '동기부여 문구', desc: '당신의 일관성은 신뢰를 만들고, 신뢰는 기회를 만듭니다.' },
-    hope: '긴 호흡의 성과는 흔들리지 않는 사람에게 돌아옵니다. 당신이 그 흐름을 만들 수 있습니다.',
     match: { name: '원칙형', desc: '신뢰 기반의 장기 프로젝트와 잘 맞습니다.' },
     mismatch: { name: '무계획형', desc: '즉흥적인 흐름은 당신의 강점을 약화시킬 수 있습니다.' }
   }
@@ -164,6 +140,21 @@ const STORYLINES = [
 
 function pickStoryline(hash) {
   return STORYLINES[hash % STORYLINES.length];
+}
+
+function buildAnalysisText(result) {
+  const lines = [];
+  lines.push(result.analysis);
+  lines.push('또한 표정의 균형과 시선의 응집력이 눈에 띄어, 감정에 휘둘리기보다 일관된 판단을 내리는 경향이 있습니다. 이는 장기적인 목표를 세우고 천천히 구조를 쌓아가는 데 유리한 신호로 해석됩니다.');
+  lines.push('');
+  lines.push(`${result.celebrity.name}은(는) ${result.celebrity.desc}로서 자신만의 흐름을 만들며 성과를 쌓아왔습니다. 당신의 관상에서도 유사한 집중력과 추진력이 느껴져, 비슷한 성장 스토리를 그릴 가능성이 큽니다. 중요한 순간에 타이밍을 잡는 감각이 보이며, 주변의 신뢰를 얻을 때 성과가 더 크게 확장되는 타입입니다.`);
+  lines.push('');
+  lines.push('긍정적인 신호가 보입니다. 지금의 선택과 실행이 쌓이면, 큰 전환점으로 이어질 수 있습니다. 오늘의 작은 시도가 내일의 결과를 만드는 흐름을 기억해보세요.');
+  lines.push('');
+  lines.push('관상 핵심 키워드');
+  lines.push(result.storyline.points.map(p => `#${p}`).join(' '));
+  lines.push('────────────────');
+  return lines.join('\n');
 }
 
 const MATCH_TYPES = [
@@ -398,11 +389,7 @@ function displayResult() {
   document.getElementById('resultPhoto').src = testResult.photo;
   document.getElementById('resultCelebrity').textContent = testResult.celebrity.name;
   document.getElementById('resultCelebrityDesc').textContent = testResult.celebrity.desc;
-  document.getElementById('resultAnalysis').textContent = testResult.analysis;
-  document.getElementById('resultPoints').textContent = testResult.storyline.points.map(p => `#${p}`).join(' ');
-  document.getElementById('resultCoreText').textContent = testResult.storyline.core.desc;
-  document.getElementById('resultMotivText').textContent = testResult.storyline.motiv.desc;
-  document.getElementById('resultHopeText').textContent = testResult.storyline.hope;
+  document.getElementById('resultAnalysis').textContent = buildAnalysisText(testResult);
   document.getElementById('resultMatchType').textContent = `${testResult.storyline.match.name} · ${testResult.storyline.match.desc}`;
   document.getElementById('resultMismatchType').textContent = `${testResult.storyline.mismatch.name} · ${testResult.storyline.mismatch.desc}`;
   document.getElementById('luckPercent').textContent = testResult.luckPercent;
@@ -427,9 +414,6 @@ async function saveToFirebase(result) {
       celebrity: result.celebrity.name,
       celebrityDesc: result.celebrity.desc,
       storylinePoints: result.storyline.points,
-      storylineCore: result.storyline.core.desc,
-      storylineMotiv: result.storyline.motiv.desc,
-      storylineHope: result.storyline.hope,
       matchType: result.storyline.match.name,
       matchDesc: result.storyline.match.desc,
       mismatchType: result.storyline.mismatch.name,
