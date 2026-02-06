@@ -441,9 +441,9 @@ function displayResult() {
   document.getElementById('resultQuoteTitle').textContent = testResult.quote.title;
   document.getElementById('resultQuoteText').textContent = testResult.quote.quote;
 
-  document.getElementById('pointLabel1').textContent = `관상 포인트1 · ${testResult.points[0].label}`;
-  document.getElementById('pointLabel2').textContent = `관상 포인트2 · ${testResult.points[1].label}`;
-  document.getElementById('pointLabel3').textContent = `관상 포인트3 · ${testResult.points[2].label}`;
+  document.getElementById('pointLabel1').textContent = `#결단`;
+  document.getElementById('pointLabel2').textContent = `#협업 능력`;
+  document.getElementById('pointLabel3').textContent = `#타고난 운`;
   document.getElementById('pointBar1').style.width = `${renderBarWidth(testResult.points[0].score)}%`;
   document.getElementById('pointBar2').style.width = `${renderBarWidth(testResult.points[1].score)}%`;
   document.getElementById('pointBar3').style.width = `${renderBarWidth(testResult.points[2].score)}%`;
