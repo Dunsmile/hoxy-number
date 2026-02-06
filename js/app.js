@@ -984,18 +984,108 @@
         const saved = getSaved();
         saved.splice(index, 1);
         localStorage.setItem(STORAGE_KEYS.SAVED, JSON.stringify(saved));
-        
+
         // 현재 페이지가 비었으면 이전 페이지로
         const startIndex = savedCurrentPageIndex * savedItemsPerPage;
         if (startIndex >= saved.length && savedCurrentPageIndex > 0) {
           savedCurrentPageIndex--;
         }
-        
+
         updateUI();
         updateWinningStats();
         showToast('삭제되었습니다');
       }
     }
+
+    // ==================== 직접 번호 입력 ====================
+
+    function onManualNumberInput(input, index) {
+      // 숫자만 허용
+      input.value = input.value.replace(/[^0-9]/g, '');
+
+      // 2자리 입력 시 다음 칸으로 자동 이동
+      if (input.value.length === 2 && index < 6) {
+        const nextInput = document.getElementById(`manualNum${index + 1}`);
+        if (nextInput) nextInput.focus();
+      }
+
+      // 저장 버튼 상태 업데이트
+      updateManualSaveButton();
+    }
+
+    function getManualNumbers() {
+      const numbers = [];
+      for (let i = 1; i <= 6; i++) {
+        const input = document.getElementById(`manualNum${i}`);
+        if (input && input.value) {
+          numbers.push(parseInt(input.value));
+        }
+      }
+      return numbers;
+    }
+
+    function validateManualNumbers() {
+      const numbers = getManualNumbers();
+
+      // 6개 모두 입력되었는지 확인
+      if (numbers.length !== 6) return { valid: false, message: '6개 번호를 모두 입력해주세요' };
+
+      // 1~45 범위 체크
+      for (const num of numbers) {
+        if (num < 1 || num > 45) {
+          return { valid: false, message: '1~45 사이 숫자만 입력 가능합니다' };
+        }
+      }
+
+      // 중복 체크
+      const unique = new Set(numbers);
+      if (unique.size !== 6) {
+        return { valid: false, message: '중복된 번호가 있습니다' };
+      }
+
+      return { valid: true, numbers: numbers.sort((a, b) => a - b) };
+    }
+
+    function updateManualSaveButton() {
+      const btn = document.getElementById('saveManualNumberBtn');
+      if (!btn) return;
+
+      const validation = validateManualNumbers();
+
+      if (validation.valid) {
+        btn.disabled = false;
+        btn.className = 'w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all text-sm cursor-pointer shadow-lg';
+      } else {
+        btn.disabled = true;
+        btn.className = 'w-full py-3 bg-gray-300 text-gray-500 font-bold rounded-xl transition-all text-sm cursor-not-allowed';
+      }
+    }
+
+    function saveManualNumber() {
+      const validation = validateManualNumbers();
+
+      if (!validation.valid) {
+        showToast(validation.message, 2000);
+        return;
+      }
+
+      // 저장 (기존 saveNumber 함수 사용)
+      saveNumber(validation.numbers);
+
+      // 입력창 초기화
+      clearManualInputs();
+    }
+
+    function clearManualInputs() {
+      for (let i = 1; i <= 6; i++) {
+        const input = document.getElementById(`manualNum${i}`);
+        if (input) input.value = '';
+      }
+      updateManualSaveButton();
+    }
+
+    window.onManualNumberInput = onManualNumberInput;
+    window.saveManualNumber = saveManualNumber;
 
     // ==================== 당첨 통계 업데이트 ====================
 

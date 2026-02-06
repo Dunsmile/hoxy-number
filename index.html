@@ -259,6 +259,36 @@
             </button>
           </div>
 
+          <!-- 직접 번호 입력 -->
+          <div class="bg-white rounded-2xl p-4 shadow-lg border border-gray-200">
+            <h3 class="font-bold text-gray-900 text-base mb-3">직접 번호 입력</h3>
+            <div class="flex items-center justify-center gap-2 mb-2">
+              <input type="text" id="manualNum1" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                class="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                oninput="onManualNumberInput(this, 1)" placeholder="?">
+              <input type="text" id="manualNum2" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                class="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                oninput="onManualNumberInput(this, 2)" placeholder="?">
+              <input type="text" id="manualNum3" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                class="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                oninput="onManualNumberInput(this, 3)" placeholder="?">
+              <input type="text" id="manualNum4" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                class="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                oninput="onManualNumberInput(this, 4)" placeholder="?">
+              <input type="text" id="manualNum5" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                class="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                oninput="onManualNumberInput(this, 5)" placeholder="?">
+              <input type="text" id="manualNum6" maxlength="2" inputmode="numeric" pattern="[0-9]*"
+                class="w-10 h-10 text-center text-lg font-bold border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none transition-colors"
+                oninput="onManualNumberInput(this, 6)" placeholder="?">
+            </div>
+            <p class="text-xs text-center text-gray-400 mb-3">1~45 사이 숫자, 중복 불가</p>
+            <button id="saveManualNumberBtn" onclick="saveManualNumber()" disabled
+              class="w-full py-3 bg-gray-300 text-gray-500 font-bold rounded-xl transition-all text-sm cursor-not-allowed">
+              내 번호 저장하기
+            </button>
+          </div>
+
           <!-- 최근 생성 번호 (슬롯 시스템) -->
           <div class="bg-white rounded-2xl p-3 shadow-lg border border-gray-200">
             <div class="flex items-center justify-between mb-3">
