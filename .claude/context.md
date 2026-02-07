@@ -8,7 +8,7 @@ HOXY는 다양한 운세/행운 관련 서비스를 제공하는 플랫폼입니
 ### ✅ 운영 중
 1. **HOXY NUMBER** - 로또 번호 생성기 (index.html)
 2. **부자가 될 상인가?** - AI 관상 테스트 (face-test.html)
-3. **오늘의 운세** - 별자리·띠·사주 운세 (daily-fortune.html)
+3. **오늘의 운세 풀이** - 별자리·띠·사주 운세 (daily-fortune.html)
 
 ### 📋 개발 예정
 4. **ONE DAY MY CARD** - 타로 카드 오늘의 운세 (1순위)
@@ -26,10 +26,10 @@ HOXY는 다양한 운세/행운 관련 서비스를 제공하는 플랫폼입니
 ## 주요 파일
 - `index.html` - HOXY NUMBER (로또 번호 생성기)
 - `face-test.html` - 관상 테스트 페이지
-- `daily-fortune.html` - 오늘의 운세 페이지
+- `daily-fortune.html` - 오늘의 운세 풀이 페이지
 - `js/app.js` - 로또 앱 로직
 - `js/face-test.js` - 관상 테스트 로직
-- `js/daily-fortune.js` - 오늘의 운세 로직
+- `js/daily-fortune.js` - 오늘의 운세 풀이 로직
 - `css/style.css` - 공통 스타일
 
 ## 핵심 기능
@@ -70,7 +70,7 @@ HOXY는 다양한 운세/행운 관련 서비스를 제공하는 플랫폼입니
 - ✅ 로또 가이드 링크를 설정 모달로 이동 (2026-02-06)
 - ✅ 정책/가이드 페이지 생성 및 사이트맵 반영 (about/privacy/terms + lotto/face-test guide) (2026-02-07)
 - ✅ 당첨 확인 탭 직접 입력: 기본 한 줄 자동 생성 제거 (2026-02-07)
-- ✅ v2.0 오늘의 운세 서비스 추가 (2026-02-07)
+- ✅ v2.0 오늘의 운세 풀이 서비스 추가 (2026-02-07)
   - 별자리(12개) · 띠(12지신) · 사주(천간지지) · 오행 종합 분석
   - 5대 카테고리 운세 (총운/애정운/금전운/건강운/직장운)
   - 행운 요소 (숫자, 아이템, 색상, 방향)
@@ -80,6 +80,7 @@ HOXY는 다양한 운세/행운 관련 서비스를 제공하는 플랫폼입니
   - 캐러셀 카드 UI (관상 테스트 / 로또 번호 교차 퍼널)
   - Firebase `daily_fortune_results` 컬렉션 저장
   - 앰버/오렌지 테마 (기존 서비스와 차별화)
+- ✅ 오늘의 운세 → 오늘의 운세 풀이 명칭 통일 + daily-fortune GTM/AdSense 중복 제거 (2026-02-08)
 
 ## Firebase 설정
 - **Project ID**: hoxy-number
@@ -91,7 +92,7 @@ HOXY는 다양한 운세/행운 관련 서비스를 제공하는 플랫폼입니
 - `generated_numbers`: 사용자가 생성한 번호 저장
 - `winning_numbers`: 당첨 번호 캐시 (회차별 당첨 정보 + 등수별 당첨금)
 - `face_test_results`: 관상 테스트 결과 (이름, 성별, 생년월일, 결과해시)
-- `daily_fortune_results`: 오늘의 운세 결과 (이름, 성별, 생년월일, 날짜, 별자리, 띠, 오행, 종합점수)
+- `daily_fortune_results`: 오늘의 운세 풀이 결과 (이름, 성별, 생년월일, 날짜, 별자리, 띠, 오행, 종합점수)
 
 ## 중요 설정값
 ```javascript
@@ -136,7 +137,7 @@ let savedItemsPerPage = 10;      // 페이지당 항목 수
 ├── HOXY 시리즈 (by Steve)
 │   ├── HOXY NUMBER (hoxy-number.pages.dev)
 │   ├── AI 관상 테스트 (hoxy-number.pages.dev/face-test.html)
-│   ├── 오늘의 운세 (hoxy-number.pages.dev/daily-fortune.html)
+│   ├── 오늘의 운세 풀이 (hoxy-number.pages.dev/daily-fortune.html)
 │   ├── ONE DAY MY CARD (예정)
 │   ├── 부자 DNA MBTI (예정)
 │   └── 부자 손금 테스트 (예정)
@@ -405,11 +406,11 @@ function updateCheckUI() {
 }
 ```
 
-### ✅ v2.0 업데이트 (2026-02-07) - 오늘의 운세 서비스
+### ✅ v2.0 업데이트 (2026-02-07) - 오늘의 운세 풀이 서비스
 
-#### 오늘의 운세 서비스 추가
+#### 오늘의 운세 풀이 서비스 추가
 - **URL**: /daily-fortune.html
-- **서비스명**: "오늘의 운세"
+- **서비스명**: "오늘의 운세 풀이"
 - **테마 컬러**: 앰버/오렌지 그라데이션
 
 #### 운세 분석 체계
@@ -478,7 +479,7 @@ function updateCheckUI() {
 |--------|--------------|----------|
 | HOXY NUMBER | 로또 가이드, 당첨 전략, FAQ | 3-5 페이지 |
 | 관상 테스트 | 관상학 소개, 유명인 분석 사례 | 2-3 페이지 |
-| 오늘의 운세 | 별자리/띠별 운세 해설 | 자동 생성 |
+| 오늘의 운세 풀이 | 별자리/띠별 운세 해설 | 자동 생성 |
 | 타로 카드 | 카드별 의미, 해석 가이드 | 5-10 페이지 |
 
 ### 필수 조건
@@ -494,11 +495,11 @@ function updateCheckUI() {
 **Phase 3: 콘텐츠 보강 (완료)** ✅
 7. ✅ HOXY NUMBER 가이드 페이지 (lotto-guide.html)
 8. ✅ 관상 테스트 가이드 페이지 (face-test-guide.html)
-9. ✅ 오늘의 운세 가이드 페이지 (daily-fortune-guide.html)
+9. ✅ 오늘의 운세 풀이 가이드 페이지 (daily-fortune-guide.html)
 10. ✅ 정책 페이지 (about/privacy/terms)
 
 **Phase 4: 서비스 확장**
-11. ✅ **오늘의 운세** (daily-fortune.html) - 별자리·띠·사주·오행 종합 운세
+11. ✅ **오늘의 운세 풀이** (daily-fortune.html) - 별자리·띠·사주·오행 종합 운세
 12. ⬜ **ONE DAY MY CARD** - 타로 카드 운세
     - 78장 타로 카드 데이터베이스
     - 카드별 상세 해석 콘텐츠
