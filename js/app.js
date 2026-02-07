@@ -1690,7 +1690,7 @@
     // ==================== 직접 번호 입력 ====================
     
     function initManualInputs() {
-      addManualInputLine();
+      // 기본 한 줄 자동 생성하지 않음
     }
 
     function addManualInputLine() {
