@@ -21,7 +21,7 @@
 - **Storage**: LocalStorage + Firebase Firestore
 - **Backend**: Firebase (Firestore Database)
 - **Hosting**: Cloudflare Pages
-  - Repository: https://github.com/Dunsmile/hoxy-number.git (→ dopamine-factory로 변경 예정)
+  - Repository: https://github.com/Dunsmile/dopamine-factory.git
   - Live URL: https://dopamine-factory.pages.dev
 
 ## 폴더 구조
@@ -123,8 +123,6 @@ dopamine-factory/
   - Cloudflare Pages 새 프로젝트 생성 (dopamine-factory.pages.dev)
   - Google Search Console 새 도메인 등록 + 사이트맵 제출
   - AdSense 새 도메인 등록
-  - "다른 정보로 운세 보기" 링크 (폼 프리필)
-  - 체크 해제 시 저장 정보 삭제
 
 ## Firebase 설정
 - **Project ID**: hoxy-number
@@ -174,7 +172,7 @@ let savedItemsPerPage = 10;      // 페이지당 항목 수
 - **라이센스**: MIT License
 
 ## 🏭 도파민 공작소 (통합 플랫폼)
-- **Repository**: https://github.com/Dunsmile/hoxy-number (→ dopamine-factory로 rename 예정)
+- **Repository**: https://github.com/Dunsmile/dopamine-factory.git
 - **Live URL**: https://dopamine-factory.pages.dev
 - **상태**: 팀 협업 구조로 재편 완료 (v3.0)
 
@@ -302,7 +300,7 @@ let savedItemsPerPage = 10;      // 페이지당 항목 수
 ### ✅ v1.5 업데이트 (2026-02-05)
 
 #### 관상 테스트 서비스 추가
-- **URL**: /face-test.html
+- **URL**: /dunsmile/rich-face/
 - **서비스명**: "부자가 될 상인가?"
 
 #### 서비스 메뉴 (햄버거 메뉴)
@@ -457,7 +455,7 @@ function updateCheckUI() {
 ### ✅ v2.0 업데이트 (2026-02-07) - 오늘의 운세 풀이 서비스
 
 #### 오늘의 운세 풀이 서비스 추가
-- **URL**: /daily-fortune.html
+- **URL**: /dunsmile/daily-fortune/
 - **서비스명**: "오늘의 운세 풀이"
 - **테마 컬러**: 앰버/오렌지 그라데이션
 
@@ -485,7 +483,7 @@ function updateCheckUI() {
 - 캐러셀 카드 UI (관상 테스트 / 로또 번호 교차 퍼널)
 - 하단 콘텐츠: FAQ, 서비스 설명 (AdSense 보강)
 
-#### 가이드 페이지 (daily-fortune-guide.html)
+#### 가이드 페이지 (dunsmile/daily-fortune/guide/)
 - 12별자리 상세 해설 (원소, 수호성, 성격)
 - 12띠 상세 해설 (오행, 지지, 성격)
 - 사주팔자 기초 (천간 10개, 지지 12개)
@@ -510,7 +508,7 @@ function updateCheckUI() {
 ```
 
 ### 🔄 진행 중
-- Google AdSense 재심사 대기 (콘텐츠 보강 완료)
+- Google AdSense 새 도메인(dopamine-factory.pages.dev) 등록 완료, 심사 대기 중
 - Cloud Function으로 당첨 통계 자동 계산 (Firebase Blaze 요금제 필요)
 
 ## 🚨 AdSense 정책 대응 플랜
@@ -541,13 +539,13 @@ function updateCheckUI() {
 **Phase 1~2: 완료** ✅
 
 **Phase 3: 콘텐츠 보강 (완료)** ✅
-7. ✅ HOXY NUMBER 가이드 페이지 (lotto-guide.html)
-8. ✅ 관상 테스트 가이드 페이지 (face-test-guide.html)
-9. ✅ 오늘의 운세 풀이 가이드 페이지 (daily-fortune-guide.html)
+7. ✅ HOXY NUMBER 가이드 페이지 (dunsmile/hoxy-number/guide/)
+8. ✅ 관상 테스트 가이드 페이지 (dunsmile/rich-face/guide/)
+9. ✅ 오늘의 운세 풀이 가이드 페이지 (dunsmile/daily-fortune/guide/)
 10. ✅ 정책 페이지 (about/privacy/terms)
 
 **Phase 4: 서비스 확장**
-11. ✅ **오늘의 운세 풀이** (daily-fortune.html) - 별자리·띠·사주·오행 종합 운세
+11. ✅ **오늘의 운세 풀이** (dunsmile/daily-fortune/) - 별자리·띠·사주·오행 종합 운세
 12. ⬜ **ONE DAY MY CARD** - 타로 카드 운세
     - 78장 타로 카드 데이터베이스
     - 카드별 상세 해석 콘텐츠
@@ -561,14 +559,14 @@ function updateCheckUI() {
     - 재물선 해석 콘텐츠
 
 **Phase 6: 수익화**
-14. ⬜ Google AdSense 재심사 신청
+14. 🔄 Google AdSense 새 도메인 등록 완료 (dopamine-factory.pages.dev), 심사 대기 중
 15. ⬜ 실제 광고 연동
 16. ⬜ 프리미엄 기능 검토
 
 ## 🔗 외부 API 연동
 - **동행복권 API** (lotto-haru.kr): 당첨 번호 + 등수별 당첨금
   - 응답 구조: `win.win1~win5.payoutStr`
-- **Google AdSense**: 광고 수익화 (미연동)
+- **Google AdSense**: 광고 수익화 (새 도메인 등록 완료, 심사 대기 중)
 
 ## 📱 반응형 브레이크포인트
 - **모바일**: < 768px (max-w-md: 448px)
