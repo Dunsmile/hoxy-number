@@ -2,6 +2,7 @@
 
 ## 프로젝트 개요
 도파민 공작소는 운세/행운 관련 서비스를 제공하는 팀 협업 플랫폼입니다.
+운세 서비스(오늘의 운세, 관상 테스트)를 통해 매일 접속을 유도하고, 로또·타로 등 다양한 콘텐츠로 체류 시간을 확보하는 구조입니다.
 레포 구조가 팀원별 폴더로 재편되었습니다 (v3.0, 2026-02-10).
 
 ## 서비스 목록
@@ -9,7 +10,7 @@
 ### ✅ 운영 중
 1. **HOXY NUMBER** - 로또 번호 생성기 (dunsmile/hoxy-number/)
 2. **부자가 될 상인가?** - AI 관상 테스트 (dunsmile/rich-face/)
-3. **오늘의 운세 풀이** - 별자리·띠·사주 운세 (dunsmile/daily-fortune/)
+3. **오늘의 운세 풀이** - 별자리·띠·사주 운세, 매일 새 결과로 재방문 유도 (dunsmile/daily-fortune/)
 
 ### 📋 개발 예정
 4. **ONE DAY MY CARD** - 타로 카드 오늘의 운세 (1순위)
@@ -76,7 +77,7 @@ dopamine-factory/
 
 ## 최근 작업 이력
 - ✅ Firebase 백엔드 통합 완료 (commit: 575f300)
-- ✅ GitHub Pages 퍼블리싱 완료
+- ✅ Cloudflare Pages 배포 완료
 - ✅ Git 저장소 초기화 및 설정 완료
 - ✅ v1.2 UI/UX 대규모 개선 (2026-02-03)
 - ✅ v1.3 버그 수정 및 기능 개선 (2026-02-03)
@@ -171,10 +172,7 @@ let savedItemsPerPage = 10;      // 페이지당 항목 수
 - **연락처**: poilkjmnb122@gmail.com
 - **라이센스**: MIT License
 
-## 🏭 도파민 공작소 (통합 플랫폼)
-- **Repository**: https://github.com/Dunsmile/dopamine-factory.git
-- **Live URL**: https://dopamine-factory.pages.dev
-- **상태**: 팀 협업 구조로 재편 완료 (v3.0)
+## 🏭 도파민 공작소 플랫폼 구조
 
 ### 서비스 구조
 ```
@@ -209,7 +207,7 @@ let savedItemsPerPage = 10;      // 페이지당 항목 수
 **소셜 프루프 기반 사용자 유입 퍼널**
 - 홈페이지에 "이 사이트에서 당첨자 X명 배출!" 카드 UI 표시
 - 신규 방문자들이 실제 당첨 사례를 보고 신뢰하여 서비스 사용 유도
-- 로또 → 사주/운세 서비스로 확장 예정
+- 로또 → 관상·운세·타로 서비스로 확장 (운세/관상 완료, 타로 예정)
 
 ### 수익화 방식
 1. **1단계 (현재)**: 완전 무료 + Google AdSense 배너 광고
@@ -230,7 +228,7 @@ let savedItemsPerPage = 10;      // 페이지당 항목 수
 - Firebase Firestore 설정 완료
 - 번호 생성 시 DB 저장 구현 완료
 - 개발자 모드에서 데이터 저장 확인 완료
-- 광고 시청 UI 구현 완료 (실제 광고 미연동)
+- 광고 시청 UI 구현 완료 (AdSense 새 도메인 등록 완료, 심사 대기 중)
 - 동행복권 API 연동 완료 (최신 회차 당첨 번호 자동 업데이트)
 - 당첨 회차 드롭다운 개선 (Firestore 캐싱)
 
@@ -542,7 +540,7 @@ function updateCheckUI() {
 7. ✅ HOXY NUMBER 가이드 페이지 (dunsmile/hoxy-number/guide/)
 8. ✅ 관상 테스트 가이드 페이지 (dunsmile/rich-face/guide/)
 9. ✅ 오늘의 운세 풀이 가이드 페이지 (dunsmile/daily-fortune/guide/)
-10. ✅ 정책 페이지 (about/privacy/terms)
+10. ✅ 정책 페이지 (dunsmile/about.html, privacy.html, terms.html)
 
 **Phase 4: 서비스 확장**
 11. ✅ **오늘의 운세 풀이** (dunsmile/daily-fortune/) - 별자리·띠·사주·오행 종합 운세
@@ -551,22 +549,26 @@ function updateCheckUI() {
     - 카드별 상세 해석 콘텐츠
 
 **Phase 5: 서비스 확장 (2순위)**
-12. ⬜ **부자 DNA MBTI** - 재테크 성향 테스트
+13. ⬜ **부자 DNA MBTI** - 재테크 성향 테스트
     - MBTI 16가지 유형별 해설
     - 투자 성향 분석 콘텐츠
-13. ⬜ **부자 손금 테스트** - 손금 속 재물운
+14. ⬜ **부자 손금 테스트** - 손금 속 재물운
     - 손금 기초 가이드
     - 재물선 해석 콘텐츠
 
 **Phase 6: 수익화**
-14. 🔄 Google AdSense 새 도메인 등록 완료 (dopamine-factory.pages.dev), 심사 대기 중
-15. ⬜ 실제 광고 연동
-16. ⬜ 프리미엄 기능 검토
+15. 🔄 Google AdSense 새 도메인 등록 완료 (dopamine-factory.pages.dev), 심사 대기 중
+16. ⬜ 실제 광고 연동
+17. ⬜ 프리미엄 기능 검토
 
-## 🔗 외부 API 연동
+## 🔗 외부 연동
 - **동행복권 API** (lotto-haru.kr): 당첨 번호 + 등수별 당첨금
   - 응답 구조: `win.win1~win5.payoutStr`
-- **Google AdSense**: 광고 수익화 (새 도메인 등록 완료, 심사 대기 중)
+- **Google AdSense**: Publisher ID `ca-pub-7301223136166743` (새 도메인 등록 완료, 심사 대기 중)
+- **GTM (Google Tag Manager)**:
+  - 서비스 페이지: `GTM-TD8GQFFB`
+  - 포털 페이지: `GTM-WX7LLGBZ`
+- **Google Search Console**: dopamine-factory.pages.dev 등록 완료, 사이트맵 제출 완료
 
 ## 📱 반응형 브레이크포인트
 - **모바일**: < 768px (max-w-md: 448px)
