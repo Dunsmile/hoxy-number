@@ -6,6 +6,12 @@ const metrics = {
   upsertDoc: 0,
   batchUpsertDocs: 0,
   detailFetch: 0,
+  detailByBoard: {
+    dcCoin: 0,
+    dcStock: 0,
+    fmCoin: 0,
+    fmStock: 0,
+  },
 };
 
 vi.mock("../src/firebase/firestore-rest", () => {
@@ -41,6 +47,16 @@ const DC_LIST_HTML_COIN = `
   <tr class="ub-content us-post">
     <td class="gall_tit"><a href="/board/view/?id=bitcoins_new1&no=100">비트코인 급등 신호</a></td>
   </tr>
+</table>
+`;
+
+const DC_LIST_HTML_COIN_HEAVY = `
+<table>
+  <tr class="ub-content us-post"><td class="gall_tit"><a href="/board/view/?id=bitcoins_new1&no=100">비트코인 급등 신호</a></td></tr>
+  <tr class="ub-content us-post"><td class="gall_tit"><a href="/board/view/?id=bitcoins_new1&no=101">이더리움 반등</a></td></tr>
+  <tr class="ub-content us-post"><td class="gall_tit"><a href="/board/view/?id=bitcoins_new1&no=102">리플 전망</a></td></tr>
+  <tr class="ub-content us-post"><td class="gall_tit"><a href="/board/view/?id=bitcoins_new1&no=103">도지 밈코인 급등</a></td></tr>
+  <tr class="ub-content us-post"><td class="gall_tit"><a href="/board/view/?id=bitcoins_new1&no=104">솔라나 단기 조정</a></td></tr>
 </table>
 `;
 
@@ -80,18 +96,26 @@ const FM_DETAIL_HTML = `
 </div>
 `;
 
+let scenario: "default" | "coin-heavy" = "default";
+
 function mockFetch(input: RequestInfo | URL): Promise<Response> {
   const url = String(input);
 
   if (url.includes("gall.dcinside.com/board/lists")) {
     if (url.includes("id=bitcoins_new1")) {
-      return Promise.resolve(new Response(DC_LIST_HTML_COIN, { status: 200 }));
+      const html = scenario === "coin-heavy" ? DC_LIST_HTML_COIN_HEAVY : DC_LIST_HTML_COIN;
+      return Promise.resolve(new Response(html, { status: 200 }));
     }
     return Promise.resolve(new Response(DC_LIST_HTML_STOCK, { status: 200 }));
   }
 
   if (url.includes("gall.dcinside.com/board/view")) {
     metrics.detailFetch += 1;
+    if (url.includes("id=bitcoins_new1")) {
+      metrics.detailByBoard.dcCoin += 1;
+    } else if (url.includes("id=neostock")) {
+      metrics.detailByBoard.dcStock += 1;
+    }
     return Promise.resolve(new Response(DC_DETAIL_HTML, { status: 200 }));
   }
 
@@ -104,6 +128,11 @@ function mockFetch(input: RequestInfo | URL): Promise<Response> {
 
   if (url.includes("fmkorea.com/posts/")) {
     metrics.detailFetch += 1;
+    if (url.includes("/posts/12345")) {
+      metrics.detailByBoard.fmCoin += 1;
+    } else if (url.includes("/posts/67890")) {
+      metrics.detailByBoard.fmStock += 1;
+    }
     return Promise.resolve(new Response(FM_DETAIL_HTML, { status: 200 }));
   }
 
@@ -117,6 +146,11 @@ describe("runPipeline efficiency", () => {
     metrics.upsertDoc = 0;
     metrics.batchUpsertDocs = 0;
     metrics.detailFetch = 0;
+    metrics.detailByBoard.dcCoin = 0;
+    metrics.detailByBoard.dcStock = 0;
+    metrics.detailByBoard.fmCoin = 0;
+    metrics.detailByBoard.fmStock = 0;
+    scenario = "default";
     vi.stubGlobal("fetch", vi.fn(mockFetch));
   });
 
@@ -145,5 +179,21 @@ describe("runPipeline efficiency", () => {
     });
 
     expect(metrics.detailFetch).toBeLessThanOrEqual(2);
+  });
+
+  it("keeps stock boards from starvation when coin board is noisy", async () => {
+    scenario = "coin-heavy";
+
+    await runPipeline({
+      FIREBASE_PROJECT_ID: "x",
+      FIREBASE_CLIENT_EMAIL: "x",
+      FIREBASE_PRIVATE_KEY: "x",
+      CRAWL_LIST_LIMIT: "30",
+      CRAWL_DETAIL_LIMIT: "4",
+      SENTIMENT_WINDOW_HOURS: "24",
+    });
+
+    expect(metrics.detailFetch).toBe(4);
+    expect(metrics.detailByBoard.dcStock + metrics.detailByBoard.fmStock).toBeGreaterThan(0);
   });
 });

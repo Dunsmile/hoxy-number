@@ -105,10 +105,13 @@ async function crawlBoards(
   let detailSuccess = 0;
   const postWrites: Array<{ collection: string; docId: string; data: Record<string, unknown> }> = [];
 
-  for (const board of boardConfigs) {
+  for (let boardIndex = 0; boardIndex < boardConfigs.length; boardIndex += 1) {
+    const board = boardConfigs[boardIndex];
     if (remainingDetailBudget <= 0) {
       break;
     }
+    const boardsLeft = boardConfigs.length - boardIndex;
+    const boardDetailBudget = Math.max(1, Math.ceil(remainingDetailBudget / boardsLeft));
 
     try {
       const listPosts =
@@ -121,8 +124,9 @@ async function crawlBoards(
               env.FMKOREA_BASE_URL || "https://www.fmkorea.com"
             );
 
+      let boardFetched = 0;
       for (const listPost of listPosts) {
-        if (remainingDetailBudget <= 0) {
+        if (remainingDetailBudget <= 0 || boardFetched >= boardDetailBudget) {
           break;
         }
 
@@ -131,6 +135,7 @@ async function crawlBoards(
         }
 
         detailAttempts += 1;
+        boardFetched += 1;
         remainingDetailBudget -= 1;
 
         const detail =
