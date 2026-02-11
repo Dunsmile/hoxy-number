@@ -1,6 +1,8 @@
 import { aggregateSentiment } from "./analyzer/keyword-score";
 import { fetchDcinsideDetail, fetchDcinsideList } from "./crawlers/dcinside";
 import { fetchFmkoreaDetail, fetchFmkoreaList } from "./crawlers/fmkorea";
+import { fetchRedditCommentPosts } from "./crawlers/reddit";
+import { fetchYoutubeCommentPosts } from "./crawlers/youtube";
 import { FirestoreClient } from "./firebase/firestore-rest";
 import { getTrackingAssets, matchAssetSymbols } from "./matcher/assets";
 import type { AssetType, PipelineResult, TrackedAsset, WorkerEnv } from "./types";
@@ -13,6 +15,14 @@ interface BoardConfig {
 }
 
 const MAX_DETAIL_FETCHES_PER_RUN = 10;
+
+type SocialSourcePost = {
+  source: "youtube" | "reddit";
+  title: string;
+  body: string;
+  url: string;
+  postedAt: string | null;
+};
 
 function getBoardConfigs(env: WorkerEnv): BoardConfig[] {
   return [
@@ -42,6 +52,27 @@ function getBoardConfigs(env: WorkerEnv): BoardConfig[] {
 function parseNumber(value: string | undefined, fallback: number): number {
   const parsed = Number.parseInt(value || "", 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function inferBoardType(matchedAssets: string[], assets: TrackedAsset[]): AssetType {
+  if (matchedAssets.length === 0) {
+    return "coin";
+  }
+
+  const typeBySymbol = new Map(assets.map((asset) => [asset.symbol, asset.type]));
+  let coinCount = 0;
+  let stockCount = 0;
+
+  for (const symbol of matchedAssets) {
+    const type = typeBySymbol.get(symbol);
+    if (type === "stock") {
+      stockCount += 1;
+    } else if (type === "coin") {
+      coinCount += 1;
+    }
+  }
+
+  return stockCount > coinCount ? "stock" : "coin";
 }
 
 function extractPostPayload(doc: Record<string, unknown>): { title: string; body?: string; source: string; collectedAt?: string } {
@@ -176,6 +207,43 @@ async function crawlBoards(
     } catch (error) {
       errors.push(`crawl_failed:${board.source}:${board.boardType}:${String(error)}`);
     }
+  }
+
+  try {
+    const socialPosts: SocialSourcePost[] = [
+      ...(await fetchYoutubeCommentPosts(env)),
+      ...(await fetchRedditCommentPosts(env)),
+    ];
+
+    for (const post of socialPosts) {
+      if (existingUrls.has(post.url)) {
+        continue;
+      }
+
+      const matchedAssets = matchAssetSymbols(`${post.title} ${post.body}`, assets);
+      const boardType = inferBoardType(matchedAssets, assets);
+      const postId = await sha1Hex(`${post.source}:${post.url}`);
+
+      postWrites.push({
+        collection: "market_posts",
+        docId: postId,
+        data: {
+          source: post.source,
+          boardType,
+          title: post.title,
+          body: post.body,
+          url: post.url,
+          postedAt: post.postedAt,
+          collectedAt: nowIso,
+          matchedAssets,
+          expireAt,
+        },
+      });
+      existingUrls.add(post.url);
+      createdPosts += 1;
+    }
+  } catch (error) {
+    errors.push(`crawl_failed:social:${String(error)}`);
   }
 
   await client.batchUpsertDocs(postWrites);

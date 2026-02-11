@@ -97,11 +97,15 @@ const FM_DETAIL_HTML = `
 `;
 
 let scenario: "default" | "coin-heavy" = "default";
+let socialScenario = false;
 
 function mockFetch(input: RequestInfo | URL): Promise<Response> {
   const url = String(input);
 
   if (url.includes("gall.dcinside.com/board/lists")) {
+    if (socialScenario) {
+      return Promise.resolve(new Response("<table></table>", { status: 200 }));
+    }
     if (url.includes("id=bitcoins_new1")) {
       const html = scenario === "coin-heavy" ? DC_LIST_HTML_COIN_HEAVY : DC_LIST_HTML_COIN;
       return Promise.resolve(new Response(html, { status: 200 }));
@@ -120,10 +124,74 @@ function mockFetch(input: RequestInfo | URL): Promise<Response> {
   }
 
   if (url.includes("fmkorea.com/coin") || url.includes("fmkorea.com/stock")) {
+    if (socialScenario) {
+      return Promise.resolve(new Response("<table></table>", { status: 200 }));
+    }
     if (url.includes("/coin")) {
       return Promise.resolve(new Response(FM_LIST_HTML_COIN, { status: 200 }));
     }
     return Promise.resolve(new Response(FM_LIST_HTML_STOCK, { status: 200 }));
+  }
+
+  if (url.includes("googleapis.com/youtube/v3/search")) {
+    return Promise.resolve(
+      new Response(
+        JSON.stringify({
+          items: [
+            {
+              id: { videoId: "video-1" },
+              snippet: { title: "BTC 시황", description: "오늘 코인 시장" },
+            },
+          ],
+        }),
+        { status: 200 }
+      )
+    );
+  }
+
+  if (url.includes("googleapis.com/youtube/v3/commentThreads")) {
+    return Promise.resolve(
+      new Response(
+        JSON.stringify({
+          items: [
+            {
+              id: "comment-1",
+              snippet: {
+                topLevelComment: {
+                  snippet: {
+                    textDisplay: "비트코인 반등 가능성",
+                    publishedAt: "2026-02-11T05:00:00.000Z",
+                  },
+                },
+              },
+            },
+          ],
+        }),
+        { status: 200 }
+      )
+    );
+  }
+
+  if (url.includes("reddit.com/r/stocks/comments.json")) {
+    return Promise.resolve(
+      new Response(
+        JSON.stringify({
+          data: {
+            children: [
+              {
+                data: {
+                  body: "삼전은 길게 보면 좋다",
+                  permalink: "/r/stocks/comments/abc123/thread/comment1/",
+                  link_title: "KR stocks thread",
+                  created_utc: 1770786000,
+                },
+              },
+            ],
+          },
+        }),
+        { status: 200 }
+      )
+    );
   }
 
   if (url.includes("fmkorea.com/posts/")) {
@@ -151,6 +219,7 @@ describe("runPipeline efficiency", () => {
     metrics.detailByBoard.fmCoin = 0;
     metrics.detailByBoard.fmStock = 0;
     scenario = "default";
+    socialScenario = false;
     vi.stubGlobal("fetch", vi.fn(mockFetch));
   });
 
@@ -195,5 +264,27 @@ describe("runPipeline efficiency", () => {
 
     expect(metrics.detailFetch).toBe(4);
     expect(metrics.detailByBoard.dcStock + metrics.detailByBoard.fmStock).toBeGreaterThan(0);
+  });
+
+  it("ingests youtube and reddit posts when social sources are enabled", async () => {
+    socialScenario = true;
+
+    const result = await runPipeline({
+      FIREBASE_PROJECT_ID: "x",
+      FIREBASE_CLIENT_EMAIL: "x",
+      FIREBASE_PRIVATE_KEY: "x",
+      CRAWL_LIST_LIMIT: "1",
+      CRAWL_DETAIL_LIMIT: "1",
+      SENTIMENT_WINDOW_HOURS: "24",
+      YOUTUBE_API_KEY: "yt-key",
+      YOUTUBE_SEARCH_QUERIES: "bitcoin",
+      YOUTUBE_MAX_VIDEOS_PER_QUERY: "1",
+      YOUTUBE_MAX_COMMENTS_PER_VIDEO: "1",
+      REDDIT_SUBREDDITS: "stocks",
+      REDDIT_COMMENTS_PER_SUBREDDIT: "1",
+      REDDIT_USER_AGENT: "dopamin-market-test/1.0",
+    } as any);
+
+    expect(result.createdPosts).toBe(2);
   });
 });
