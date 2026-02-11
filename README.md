@@ -4,7 +4,34 @@
 
 **Live**: https://dopamine-factory.pages.dev
 
-## 서비스
+## 구조 원칙
+
+- 서비스별 최상위 폴더가 아니라 `be/`(백엔드), `fe/`(프론트엔드)로 분리
+- Git workflow 기반으로 브랜치/릴리즈/핫픽스 전략 운영
+- 배포 대상도 `fe`, `be` 단위로 독립 관리
+
+## 프로젝트 구조
+
+```text
+dopamin/
+├── be/                      (백엔드 코드/인프라)
+├── fe/
+│   ├── README.md
+│   └── public/              (Cloudflare Pages 배포 루트)
+│       ├── index.html       (포털 랜딩 페이지)
+│       ├── robots.txt, sitemap.xml, ads.txt, _headers
+│       ├── dunsmile/        (현재 운영 서비스)
+│       ├── teammate/        (팀원 서비스 - 준비 중)
+│       └── assets/          (공용 리소스)
+├── docs/
+│   └── GIT_WORKFLOW.md
+├── tests/
+│   └── structure.test.sh
+└── .github/workflows/
+    └── ci.yml
+```
+
+## 서비스 경로 (운영 URL)
 
 | 서비스 | 경로 | 설명 |
 |--------|------|------|
@@ -13,41 +40,16 @@
 | 부자가 될 상인가? | `/dunsmile/rich-face/` | AI 관상 분석 부자 확률 테스트 |
 | 오늘의 운세 | `/dunsmile/daily-fortune/` | 별자리, 띠, 사주 종합 운세 |
 
-## 프로젝트 구조
-
-```
-dopamine-factory/
-├── index.html              (포털 랜딩 페이지)
-├── robots.txt, sitemap.xml, ads.txt, _headers
-├── dunsmile/                (Dunsmile 서비스)
-│   ├── hoxy-number/         (HOXY NUMBER)
-│   │   ├── index.html
-│   │   └── guide/index.html
-│   ├── rich-face/           (관상 테스트)
-│   │   ├── index.html
-│   │   └── guide/index.html
-│   ├── daily-fortune/       (오늘의 운세)
-│   │   ├── index.html
-│   │   └── guide/index.html
-│   ├── css/, js/            (공유 스타일/스크립트)
-│   ├── about.html, privacy.html, terms.html
-│   └── favicons, og-images
-├── teammate/                (팀원 서비스 - 준비 중)
-└── assets/                  (공용 리소스)
-```
-
-## 기술 스택
-
-- HTML5, CSS3 (Tailwind CDN), Vanilla JavaScript
-- Firebase Firestore (공유 카운터)
-- Cloudflare Pages 호스팅
-
 ## 로컬 실행
 
 ```bash
-python3 -m http.server 8080
+python3 -m http.server 8080 --directory fe/public
 # http://localhost:8080/ 에서 확인
 ```
+
+## Git Workflow
+
+브랜치 전략과 배포 규칙은 `docs/GIT_WORKFLOW.md`를 참고하세요.
 
 ## 라이센스
 

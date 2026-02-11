@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main, develop]
+  push:
+    branches: [main, develop]
+
+jobs:
+  structure-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate mono structure
+        run: bash tests/structure.test.sh
+
+  frontend-smoke:
+    runs-on: ubuntu-latest
+    needs: structure-check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate frontend entrypoints
+        run: |
+          test -f fe/public/index.html
+          test -d fe/public/dunsmile
+          test -d fe/public/assets
+          test -f fe/public/sitemap.xml
+          test -f fe/public/robots.txt
+
+  backend-smoke:
+    runs-on: ubuntu-latest
+    needs: structure-check
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Validate backend folder
+        run: |
+          test -d be
+          test -f be/README.md
