@@ -11,6 +11,57 @@ const {
 
 const HERO_AUTOPLAY_MS = 5000;
 let heroAutoplayTimer = null;
+const SERVICE_TONE_BY_CATEGORY = {
+  fortune: 'violet',
+  finance: 'emerald',
+  luck: 'amber',
+  fun: 'blue',
+};
+
+function resolveServiceTone(service, toneByCategory = SERVICE_TONE_BY_CATEGORY) {
+  return toneByCategory[service.category] || 'blue';
+}
+
+function renderServiceImage(service, toneByCategory, { loading = 'lazy', id = '' } = {}) {
+  const idAttr = id ? ` id="${id}"` : '';
+  const tone = resolveServiceTone(service, toneByCategory);
+  return `<img${idAttr} src="${serviceBanner(service)}" data-fallback="${makeDummyArt(service.fullName, tone)}" alt="${service.fullName}" loading="${loading}">`;
+}
+
+function renderFavoriteToggle(serviceId, isFavorite) {
+  return `<button type="button" class="nx-fav-btn ${isFavorite ? 'active' : ''}" data-action="toggle-favorite" data-service-id="${serviceId}" aria-label="${isFavorite ? 'MY에서 제거' : 'MY에 추가'}">${isFavorite ? '♥' : '♡'}</button>`;
+}
+
+function renderLatestItem(service, { isFavorite, toneByCategory }) {
+  return `
+    <a href="${service.url}" class="nx-latest-item">
+      <div class="nx-latest-thumb">
+        ${renderServiceImage(service, toneByCategory)}
+        ${renderFavoriteToggle(service.id, isFavorite)}
+      </div>
+      <div class="nx-latest-meta">
+        <p>${service.fullName}</p>
+        <span class="nx-latest-tags">${latestServiceTags(service).map((tag) => `#${tag}`).join(' ')}</span>
+      </div>
+    </a>
+  `;
+}
+
+function renderCatalogItem(service, { isFavorite, toneByCategory }) {
+  return `
+    <a href="${service.url}" class="nx-service-card" data-service-category="${service.category}">
+      <div class="nx-service-thumb">
+        ${renderServiceImage(service, toneByCategory)}
+        <span class="nx-service-pill">${categoryPillLabel(service.category)}</span>
+        ${renderFavoriteToggle(service.id, isFavorite)}
+      </div>
+      <div class="nx-service-body">
+        <h3>${service.fullName}</h3>
+        <p>${service.desc}</p>
+      </div>
+    </a>
+  `;
+}
 
 function enhanceHomeFeedMedia(root) {
   root.querySelectorAll('img').forEach((img) => {
@@ -45,12 +96,7 @@ function renderCompactHome() {
     { key: 'luck', label: '유틸' },
     { key: 'finance', label: '데이터' },
   ];
-  const toneByCategory = {
-    fortune: 'violet',
-    finance: 'emerald',
-    luck: 'amber',
-    fun: 'blue',
-  };
+  const toneByCategory = SERVICE_TONE_BY_CATEGORY;
 
   root.innerHTML = `
     <section class="nx-home-shell">
@@ -66,12 +112,12 @@ function renderCompactHome() {
           </div>
           <div class="nx-hero-visual">
             <a href="${hero.url}" id="heroMainLink" class="nx-hero-main-card">
-              <img id="heroMainImage" src="${serviceBanner(hero)}" data-fallback="${makeDummyArt(hero.fullName, toneByCategory[hero.category])}" alt="${hero.fullName}" loading="eager">
+              ${renderServiceImage(hero, toneByCategory, { loading: 'eager', id: 'heroMainImage' })}
             </a>
             <div class="nx-hero-stack" id="heroStack">
               ${heroStack.map((s, i) => `
                 <a href="${s.url}" class="nx-stack-card offset-${i}">
-                  <img src="${serviceBanner(s)}" data-fallback="${makeDummyArt(s.fullName, toneByCategory[s.category])}" alt="${s.fullName}" loading="lazy">
+                  ${renderServiceImage(s, toneByCategory)}
                 </a>
               `).join('')}
             </div>
@@ -92,18 +138,7 @@ function renderCompactHome() {
           <div class="nx-latest-grid">
             ${latest.map((s) => {
               const isFavorite = favorites.includes(s.id);
-              return `
-              <a href="${s.url}" class="nx-latest-item">
-                <div class="nx-latest-thumb">
-                  <img src="${serviceBanner(s)}" data-fallback="${makeDummyArt(s.fullName, toneByCategory[s.category])}" alt="${s.fullName}" loading="lazy">
-                  <button type="button" class="nx-fav-btn ${isFavorite ? 'active' : ''}" data-action="toggle-favorite" data-service-id="${s.id}" aria-label="${isFavorite ? 'MY에서 제거' : 'MY에 추가'}">${isFavorite ? '♥' : '♡'}</button>
-                </div>
-                <div class="nx-latest-meta">
-                  <p>${s.fullName}</p>
-                  <span class="nx-latest-tags">${latestServiceTags(s).map((tag) => `#${tag}`).join(' ')}</span>
-                </div>
-              </a>
-            `;
+              return renderLatestItem(s, { isFavorite, toneByCategory });
             }).join('')}
           </div>
         </section>
@@ -124,19 +159,7 @@ function renderCompactHome() {
           <div class="nx-service-grid">
             ${SERVICES.map((s) => {
               const isFavorite = favorites.includes(s.id);
-              return `
-              <a href="${s.url}" class="nx-service-card" data-service-category="${s.category}">
-                <div class="nx-service-thumb">
-                  <img src="${serviceBanner(s)}" data-fallback="${makeDummyArt(s.fullName, toneByCategory[s.category])}" alt="${s.fullName}" loading="lazy">
-                  <span class="nx-service-pill">${categoryPillLabel(s.category)}</span>
-                  <button type="button" class="nx-fav-btn ${isFavorite ? 'active' : ''}" data-action="toggle-favorite" data-service-id="${s.id}" aria-label="${isFavorite ? 'MY에서 제거' : 'MY에 추가'}">${isFavorite ? '♥' : '♡'}</button>
-                </div>
-                <div class="nx-service-body">
-                  <h3>${s.fullName}</h3>
-                  <p>${s.desc}</p>
-                </div>
-              </a>
-            `;
+              return renderCatalogItem(s, { isFavorite, toneByCategory });
             }).join('')}
           </div>
 
@@ -196,7 +219,7 @@ function initHeroCarousel(root, heroSlides, toneByCategory) {
 
     stackEl.innerHTML = stackSlides.map((item, stackIndex) => `
       <a href="${item.slide.url}" class="nx-stack-card offset-${stackIndex}">
-        <img src="${serviceBanner(item.slide)}" data-fallback="${makeDummyArt(item.slide.fullName, toneByCategory[item.slide.category])}" alt="${item.slide.fullName}" loading="lazy">
+        ${renderServiceImage(item.slide, toneByCategory)}
       </a>
     `).join('');
   };
@@ -212,7 +235,7 @@ function initHeroCarousel(root, heroSlides, toneByCategory) {
     mainLinkEl.href = slide.url;
     mainImageEl.src = serviceBanner(slide);
     mainImageEl.alt = slide.fullName;
-    mainImageEl.dataset.fallback = makeDummyArt(slide.fullName, toneByCategory[slide.category]);
+    mainImageEl.dataset.fallback = makeDummyArt(slide.fullName, resolveServiceTone(slide, toneByCategory));
     renderStack(index);
     enhanceHomeFeedMedia(root);
 
@@ -768,7 +791,7 @@ function renderTabServiceCard(service, { removable = false } = {}) {
   return `
     <a href="${service.url}" class="nx-tab-card ${removable ? 'has-remove' : ''}">
       <div class="nx-tab-thumb">
-        <img src="${serviceBanner(service)}" data-fallback="${makeDummyArt(service.fullName, 'blue')}" alt="${service.fullName}" loading="lazy">
+        ${renderServiceImage(service, SERVICE_TONE_BY_CATEGORY)}
         <span class="nx-service-pill">${categoryPillLabel(service.category)}</span>
       </div>
       <div class="nx-tab-body">
