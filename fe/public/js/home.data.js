@@ -1,14 +1,14 @@
 /* 도파민 공작소 홈 - shared data and pure helpers */
 (function initHomeData(global) {
   const SERVICES = [
-    { id: 'hoxy-number', name: 'HOXY', emoji: '🎱', bg: '#dbeafe', url: '/dunsmile/hoxy-number/', desc: '무료 로또 번호 생성기 - 행운의 번호를 추천받고 당첨 확인까지', fullName: 'HOXY NUMBER', category: 'luck' },
-    { id: 'rich-face', name: '부자상?', emoji: '👤', bg: '#fef3c7', url: '/dunsmile/rich-face/', desc: 'AI 관상 분석으로 알아보는 나의 부자 확률', fullName: '부자가 될 상인가?', category: 'fortune' },
-    { id: 'daily-fortune', name: '운세', emoji: '🔮', bg: '#f3e8ff', url: '/dunsmile/daily-fortune/', desc: '별자리, 띠, 사주로 보는 오늘의 종합 운세', fullName: '오늘의 운세', category: 'fortune' },
-    { id: 'balance-game', name: '밸런스', emoji: '⚖️', bg: '#ffedd5', url: '/dunsmile/balance-game/', desc: '두 선택 중 하나를 고르고, 전체 선택 비율을 확인해보세요', fullName: '오늘의 밸런스 게임', category: 'fun' },
-    { id: 'name-compatibility', name: '이름궁합', emoji: '💞', bg: '#cffafe', url: '/dunsmile/name-compatibility/', desc: '두 이름을 입력하면 케미 점수와 궁합 키워드를 확인할 수 있어요', fullName: '이름 궁합 테스트', category: 'fortune' },
-    { id: 'market-sentiment', name: '시장감성', emoji: '📈', bg: '#d1fae5', url: '/dunsmile/market-sentiment/', desc: '펨코·디씨 게시글 기반 주식/코인 커뮤니티 감성 분석', fullName: '시장 감성 레이더', category: 'finance' },
-    { id: 'tarot-reading', name: '타로', emoji: '🃏', bg: '#e0e7ff', url: '/dunsmile/tarot-reading/', desc: '78장 타로 카드가 전하는 오늘의 메시지, 무료 타로 리딩', fullName: 'ONE DAY MY CARD', category: 'fortune' },
-    { id: 'dopamine-lab', name: '실험실', emoji: '🧪', bg: '#dbeafe', url: '/dunsmile/about/', desc: '신규 실험형 서비스를 가장 먼저 만나보는 프리뷰 라운지', fullName: '도파민 랩 프리뷰', category: 'fun' },
+    { id: 'hoxy-number', name: 'HOXY', emoji: '🎱', url: '/dunsmile/hoxy-number/', desc: '무료 로또 번호 생성기 - 행운의 번호를 추천받고 당첨 확인까지', fullName: 'HOXY NUMBER', category: 'luck' },
+    { id: 'rich-face', name: '부자상?', emoji: '👤', url: '/dunsmile/rich-face/', desc: 'AI 관상 분석으로 알아보는 나의 부자 확률', fullName: '부자가 될 상인가?', category: 'fortune' },
+    { id: 'daily-fortune', name: '운세', emoji: '🔮', url: '/dunsmile/daily-fortune/', desc: '별자리, 띠, 사주로 보는 오늘의 종합 운세', fullName: '오늘의 운세', category: 'fortune' },
+    { id: 'balance-game', name: '밸런스', emoji: '⚖️', url: '/dunsmile/balance-game/', desc: '두 선택 중 하나를 고르고, 전체 선택 비율을 확인해보세요', fullName: '오늘의 밸런스 게임', category: 'fun' },
+    { id: 'name-compatibility', name: '이름궁합', emoji: '💞', url: '/dunsmile/name-compatibility/', desc: '두 이름을 입력하면 케미 점수와 궁합 키워드를 확인할 수 있어요', fullName: '이름 궁합 테스트', category: 'fortune' },
+    { id: 'market-sentiment', name: '시장감성', emoji: '📈', url: '/dunsmile/market-sentiment/', desc: '펨코·디씨 게시글 기반 주식/코인 커뮤니티 감성 분석', fullName: '시장 감성 레이더', category: 'finance' },
+    { id: 'tarot-reading', name: '타로', emoji: '🃏', url: '/dunsmile/tarot-reading/', desc: '78장 타로 카드가 전하는 오늘의 메시지, 무료 타로 리딩', fullName: 'ONE DAY MY CARD', category: 'fortune' },
+    { id: 'dopamine-lab', name: '실험실', emoji: '🧪', url: '/dunsmile/about/', desc: '신규 실험형 서비스를 가장 먼저 만나보는 프리뷰 라운지', fullName: '도파민 랩 프리뷰', category: 'fun' },
   ];
 
   const FORTUNE_SERVICES = SERVICES.filter((s) => s.category === 'fortune');
